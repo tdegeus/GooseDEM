@@ -1,0 +1,9 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+
+Name: GooseDEM
+Description: Simple implementation for DEM
+Requires:
+Version: @GOOSEDEM_VERSION_NUMBER@
+Libs:
+Cflags: -I${prefix}/@INCLUDE_INSTALL_DIR@
