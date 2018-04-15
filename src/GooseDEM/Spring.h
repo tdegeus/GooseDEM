@@ -4,8 +4,8 @@
 
 ================================================================================================= */
 
-#ifndef GOOSEDEM_CONSTITUTIVE_H
-#define GOOSEDEM_CONSTITUTIVE_H
+#ifndef GOOSEDEM_SPRING_H
+#define GOOSEDEM_SPRING_H
 
 // -------------------------------------------------------------------------------------------------
 
@@ -21,9 +21,9 @@ class Spring
 {
 private:
 
-  MatS m_particles; // 'list' particle-id pairs   [nspring, ndim]
-  ColD m_k;         // stiffness                  [nspring]
-  ColD m_D0;        // relaxed length             [nspring]
+  MatS m_particles; // 'list' particle-id pairs   [n, ndim]
+  ColD m_k;         // stiffness                  [n]
+  ColD m_D0;        // relaxed length             [n]
 
 public:
 
@@ -31,10 +31,10 @@ public:
   Spring(){};
   Spring(const MatS &particles, const ColD &k, const ColD &D0);
 
-  // compute the spring force on each particle
+  // compute the force on each particle
   MatD force(const MatD &x) const;
 
-  // compute the coordination number of each spring
+  // compute the coordination
   ColS coordination(const MatD &X) const;
 
 };

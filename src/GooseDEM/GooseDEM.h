@@ -53,11 +53,11 @@ namespace GooseDEM {
 
 // -------------------------------------------------------------------------------------------------
 
-#include "Constitutive.h"
+#include "Spring.h"
 #include "Geometry.h"
 #include "Sim.h"
 
-#include "Constitutive.cpp"
+#include "Spring.cpp"
 #include "Geometry.cpp"
 #include "Sim.cpp"
 
