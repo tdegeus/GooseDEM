@@ -1,11 +1,11 @@
 /* =================================================================================================
 
-(c - MIT) T.W.J. de Geus (Tom) | tom@geus.me | www.geus.me | github.com/tdegeus/FrictionDEM
+(c - MIT) T.W.J. de Geus (Tom) | tom@geus.me | www.geus.me | github.com/tdegeus/GooseDEM
 
 ================================================================================================= */
 
-#ifndef FRICTIONFEM_CONSTITUTIVE_CPP
-#define FRICTIONFEM_CONSTITUTIVE_CPP
+#ifndef GOOSEDEM_CONSTITUTIVE_CPP
+#define GOOSEDEM_CONSTITUTIVE_CPP
 
 // -------------------------------------------------------------------------------------------------
 
@@ -13,7 +13,7 @@
 
 // -------------------------------------------------------------------------------------------------
 
-namespace FrictionDEM {
+namespace GooseDEM {
 
 // -------------------------------------------------------------------------------------------------
 

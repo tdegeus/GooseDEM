@@ -1,19 +1,19 @@
 /* =================================================================================================
 
-(c - MIT) T.W.J. de Geus (Tom) | tom@geus.me | www.geus.me | github.com/tdegeus/FrictionDEM
+(c - MIT) T.W.J. de Geus (Tom) | tom@geus.me | www.geus.me | github.com/tdegeus/GooseDEM
 
 ================================================================================================= */
 
-#ifndef FRICTIONFEM_SIM_H
-#define FRICTIONFEM_SIM_H
+#ifndef GOOSEDEM_SIM_H
+#define GOOSEDEM_SIM_H
 
 // -------------------------------------------------------------------------------------------------
 
-#include "FrictionDEM.h"
+#include "GooseDEM.h"
 
 // -------------------------------------------------------------------------------------------------
 
-namespace FrictionDEM {
+namespace GooseDEM {
 
 // -------------------------------------------------------------------------------------------------
 

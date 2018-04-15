@@ -1,2 +1,3 @@
-# FrictionDEM
-DEM code to study friction
+# GooseDEM
+
+Simple code to perform simulations using the Discrete Element Method.
