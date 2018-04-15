@@ -27,7 +27,7 @@ inline Spring::Spring(const MatS &particles, const ColD &k, const ColD &D0) :
 
 // -------------------------------------------------------------------------------------------------
 
-inline MatD Spring::force(const MatD &X)
+inline MatD Spring::force(const MatD &X) const
 {
   // number of spatial dimensions
   int nd = X.cols();
@@ -74,7 +74,7 @@ inline MatD Spring::force(const MatD &X)
 
 // -------------------------------------------------------------------------------------------------
 
-inline ColS Spring::coordination(const MatD &X)
+inline ColS Spring::coordination(const MatD &X) const
 {
   // coordination per particle
   // - allocate

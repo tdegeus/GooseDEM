@@ -32,10 +32,10 @@ public:
   Spring(const MatS &particles, const ColD &k, const ColD &D0);
 
   // compute the spring force on each particle
-  MatD force(const MatD &x);
+  MatD force(const MatD &x) const;
 
   // compute the coordination number of each spring
-  ColS coordination(const MatD &X);
+  ColS coordination(const MatD &X) const;
 
 };
 

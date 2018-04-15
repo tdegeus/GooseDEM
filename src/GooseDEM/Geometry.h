@@ -28,6 +28,11 @@ private:
   ColD m_m;     // mass         [N, ndim]
   MatS m_dofs;  // DOF-number   [N, ndim]
 
+  // dimensions
+  size_t m_N;    // number of particles
+  size_t m_ndim; // number of spatial dimensions
+  size_t m_ndof; // number of DOFs
+
   // constitutive models
   Spring m_spring;
 
@@ -37,31 +42,35 @@ public:
   Geometry(const ColD &m, const MatD &x, const MatS &dofs);
 
   // append constitutive models
-  void setSpring(const Spring &mat);
+  void set(const Spring &mat);
 
-  // return particle values
-  MatD x(); // position vector     [N, ndim]
-  MatD v(); // velocity vector     [N, ndim]
-  MatD a(); // acceleration vector [N, ndim]
-  MatD f(); // force vector        [N, ndim]
-  ColD m(); // mass                [N, ndim]
+  // return particle vectors [N, ndim] or values [N]
+  MatD x() const;
+  MatD v() const;
+  MatD a() const;
+  MatD f() const;
+  ColD m() const;
 
-  // return DOF values
-  ColD dofs_x(); // position     [ndof]
-  ColD dofs_v(); // velocity     [ndof]
-  ColD dofs_a(); // acceleration [ndof]
-  ColD dofs_f(); // force        [ndof]
-  ColD dofs_m(); // mass         [ndof]
+  // return DOF values [ndof]
+  ColD dofs_x() const;
+  ColD dofs_v() const;
+  ColD dofs_a() const;
+  ColD dofs_f() const;
+  ColD dofs_m() const;
 
-  // overwrite particle values
-  void set_x(const MatD &pvec); // position vector     [N, ndim]
-  void set_v(const MatD &pvec); // velocity vector     [N, ndim]
-  void set_a(const MatD &pvec); // acceleration vector [N, ndim]
+  // overwrite particle vectors [N, ndim]
+  void set_x(const MatD &pvec);
+  void set_v(const MatD &pvec);
+  void set_a(const MatD &pvec);
 
-  // reconstruct particle values from DOF values
-  void set_dofs_x(const MatD &pvec); // position     [ndof]
-  void set_dofs_v(const MatD &pvec); // velocity     [ndof]
-  void set_dofs_a(const MatD &pvec); // acceleration [ndof]
+  // convert to DOF values (overwrite entries that occur more that once): [N, ndim] -> [ndof]
+  ColD asDofs(const MatD &pvec) const;
+
+  // assemble vectors (adds entries that occur more that once): [N, ndim] -> [ndof]
+  ColD assembleDofs(const MatD &pvec) const;
+
+  // reconstruct particle vectors: [ndof] -> [N, ndim]
+  MatD asParticle(const ColD &dofval) const;
 
 };
 
