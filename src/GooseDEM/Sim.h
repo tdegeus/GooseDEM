@@ -17,6 +17,10 @@ namespace GooseDEM {
 
 // -------------------------------------------------------------------------------------------------
 
+inline void velocityVerlet(
+  Geometry &geometry, double dt,
+  const ColS &iip=ColS(), const ColD &vp=ColD(), const ColD &ap=ColD()
+);
 
 // -------------------------------------------------------------------------------------------------
 
