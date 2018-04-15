@@ -48,6 +48,13 @@ inline void Geometry::set(const Spring &mat)
 
 // -------------------------------------------------------------------------------------------------
 
+inline void Geometry::set(const Dashpot &mat)
+{
+  m_dashpot = mat;
+}
+
+// -------------------------------------------------------------------------------------------------
+
 inline MatD Geometry::x() const
 {
   return m_x;
@@ -85,7 +92,8 @@ inline MatD Geometry::f() const
   f.setZero();
 
   // evaluate constitutive models
-  f += m_spring.force(m_x);
+  f += m_spring .force(m_x);
+  f += m_dashpot.force(m_x);
 
   return f;
 }
@@ -241,6 +249,18 @@ inline MatD Geometry::asParticle(const ColD &dofval) const
       pvec(n,i) = dofval(m_dofs(n,i));
 
   return pvec;
+}
+
+// -------------------------------------------------------------------------------------------------
+
+template<class X>
+inline void dump(const std::string &fname, const X &matrix)
+{
+  const static Eigen::IOFormat fmt(Eigen::StreamPrecision, 0, ", ", "\n");
+
+  std::ofstream file(fname.c_str());
+
+  file << matrix.format(fmt);
 }
 
 // -------------------------------------------------------------------------------------------------

@@ -21,9 +21,9 @@ class Spring
 {
 private:
 
-  MatS m_particles; // 'list' particle-id pairs   [n, ndim]
-  ColD m_k;         // stiffness                  [n]
-  ColD m_D0;        // relaxed length             [n]
+  MatS m_particles; // particle pairs   [n, ndim]
+  ColD m_k;         // stiffness        [n]
+  ColD m_D0;        // relaxed length   [n]
 
 public:
 
@@ -31,10 +31,10 @@ public:
   Spring(){};
   Spring(const MatS &particles, const ColD &k, const ColD &D0);
 
-  // compute the force on each particle
+  // compute the force on each particle (the output could contain many zero rows)
   MatD force(const MatD &x) const;
 
-  // compute the coordination
+  // compute the coordination of each particle
   ColS coordination(const MatD &X) const;
 
 };

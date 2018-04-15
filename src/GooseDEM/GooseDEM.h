@@ -13,6 +13,7 @@
 #define _USE_MATH_DEFINES
 
 #include <tuple>
+#include <fstream>
 #include <stdexcept>
 #include <limits>
 #include <math.h>
@@ -54,10 +55,12 @@ namespace GooseDEM {
 // -------------------------------------------------------------------------------------------------
 
 #include "Spring.h"
+#include "Dashpot.h"
 #include "Geometry.h"
 #include "Sim.h"
 
 #include "Spring.cpp"
+#include "Dashpot.cpp"
 #include "Geometry.cpp"
 #include "Sim.cpp"
 

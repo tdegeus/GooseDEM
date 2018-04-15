@@ -21,8 +21,8 @@ class Dashpot
 {
 private:
 
-  MatS m_particles; // 'list' particle-id pairs   [n, ndim]
-  ColD m_eta;       // damping constant           [n]
+  MatS m_particles; // particle pairs   [n, ndim]
+  ColD m_eta;       // damping constant [n]
 
 public:
 
@@ -30,10 +30,10 @@ public:
   Dashpot(){};
   Dashpot(const MatS &particles, const ColD &eta);
 
-  // compute the force on each particle
+  // compute the force on each particle (the output could contain many zero rows)
   MatD force(const MatD &v) const;
 
-  // compute the coordination
+  // compute the coordination of each particle
   ColS coordination(const MatD &X) const;
 
 };

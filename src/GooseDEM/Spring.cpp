@@ -29,20 +29,21 @@ inline Spring::Spring(const MatS &particles, const ColD &k, const ColD &D0) :
 
 inline MatD Spring::force(const MatD &X) const
 {
-  // number of spatial dimensions
-  int nd = X.cols();
+  // dimensions
+  int n    = X.rows(); // number of particles
+  int ndim = X.cols(); // number of dimensions
 
   // force per particle
   // - allocate
-  MatD F(X.rows(), nd);
+  MatD F(n, ndim);
   // - zero-initialize
   F.setZero();
 
   // local variables
-  cppmat::cartesian::vector<double> xi(nd); // position of particle "i"
-  cppmat::cartesian::vector<double> xj(nd); // position of particle "j"
-  cppmat::cartesian::vector<double> dx(nd); // position difference
-  cppmat::cartesian::vector<double> f (nd); // force vector
+  cppmat::cartesian::vector<double> xi(ndim); // position of particle "i"
+  cppmat::cartesian::vector<double> xj(ndim); // position of particle "j"
+  cppmat::cartesian::vector<double> dx(ndim); // position difference
+  cppmat::cartesian::vector<double> f (ndim); // force vector
   double D; // distance in 'local coordinates'
 
   // loop over all springs
@@ -52,8 +53,8 @@ inline MatD Spring::force(const MatD &X) const
     size_t i = m_particles(p,0);
     size_t j = m_particles(p,1);
     // - copy the particles' positions to the vectors "xi" and "xj"
-    std::copy(X.data()+i*nd, X.data()+(i+1)*nd, xi.data());
-    std::copy(X.data()+j*nd, X.data()+(j+1)*nd, xj.data());
+    std::copy(X.data()+i*ndim, X.data()+(i+1)*ndim, xi.data());
+    std::copy(X.data()+j*ndim, X.data()+(j+1)*ndim, xj.data());
     // - compute the position difference vector
     dx = xj - xi;
     // - compute the current length
@@ -61,7 +62,7 @@ inline MatD Spring::force(const MatD &X) const
     // - compute the force vector, by comparing to the spring's relaxed length
     f = m_k(p) * (D - m_D0(p)) * dx/D;
     // - assemble the force to the particles
-    for ( size_t d = 0 ; d < nd ; ++d )
+    for ( size_t d = 0 ; d < ndim ; ++d )
     {
       F(i,d) += f(d);
       F(j,d) -= f(d);

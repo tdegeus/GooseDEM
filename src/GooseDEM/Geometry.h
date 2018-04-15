@@ -34,7 +34,8 @@ private:
   size_t m_ndof; // number of DOFs
 
   // constitutive models
-  Spring m_spring;
+  Spring  m_spring;
+  Dashpot m_dashpot;
 
 public:
 
@@ -42,7 +43,8 @@ public:
   Geometry(const ColD &m, const MatD &x, const MatS &dofs);
 
   // append constitutive models
-  void set(const Spring &mat);
+  void set(const Spring  &mat);
+  void set(const Dashpot &mat);
 
   // return particle vectors [N, ndim] or values [N]
   MatD x() const;
@@ -73,6 +75,11 @@ public:
   MatD asParticle(const ColD &dofval) const;
 
 };
+
+// -------------------------------------------------------------------------------------------------
+
+template<class X>
+inline void dump(const std::string &fname, const X &matrix);
 
 // -------------------------------------------------------------------------------------------------
 
