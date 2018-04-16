@@ -47,7 +47,7 @@ inline MatD Spring::force(const MatD &X) const
   double D; // distance in 'local coordinates'
 
   // loop over all springs
-  for ( size_t p = 0 ; p < m_particles.rows() ; ++p )
+  for ( auto p = 0 ; p < m_particles.rows() ; ++p )
   {
     // - extract particle numbers
     size_t i = m_particles(p,0);
@@ -62,7 +62,7 @@ inline MatD Spring::force(const MatD &X) const
     // - compute the force vector, by comparing to the spring's relaxed length
     f = m_k(p) * (D - m_D0(p)) * dx/D;
     // - assemble the force to the particles
-    for ( size_t d = 0 ; d < ndim ; ++d )
+    for ( auto d = 0 ; d < ndim ; ++d )
     {
       F(i,d) += f(d);
       F(j,d) -= f(d);
@@ -83,7 +83,7 @@ inline ColS Spring::coordination(const MatD &X) const
   C.setZero();
 
   // loop over all springs
-  for ( size_t p = 0 ; p < m_particles.rows() ; ++p )
+  for ( auto p = 0 ; p < m_particles.rows() ; ++p )
   {
     // - extract particle numbers
     size_t i = m_particles(p,0);
