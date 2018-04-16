@@ -217,8 +217,8 @@ inline ColD Geometry::assembleDofs(const MatD &pvec) const
 
     // - per thread; assemble
     #pragma omp for
-    for ( size_t n = 0 ; n < m_N ; ++n )
-      for ( size_t i = 0 ; i < m_ndim ; ++i )
+    for ( auto n = 0 ; n < m_N ; ++n )
+      for ( auto i = 0 ; i < m_ndim ; ++i )
         t_dofval(m_dofs(n,i)) += pvec(n,i);
 
     // - reduce: combine result obtained on the different threads
@@ -244,8 +244,8 @@ inline MatD Geometry::asParticle(const ColD &dofval) const
 
   // apply conversion
   #pragma omp for
-  for ( size_t n = 0 ; n < m_N ; ++n )
-    for ( size_t i = 0 ; i < m_ndim ; ++i )
+  for ( auto n = 0 ; n < m_N ; ++n )
+    for ( auto i = 0 ; i < m_ndim ; ++i )
       pvec(n,i) = dofval(m_dofs(n,i));
 
   return pvec;

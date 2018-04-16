@@ -30,8 +30,8 @@ inline Spring::Spring(const MatS &particles, const ColD &k, const ColD &D0) :
 inline MatD Spring::force(const MatD &X) const
 {
   // dimensions
-  int n    = X.rows(); // number of particles
-  int ndim = X.cols(); // number of dimensions
+  auto n    = X.rows(); // number of particles
+  auto ndim = X.cols(); // number of dimensions
 
   // force per particle
   // - allocate
@@ -50,8 +50,8 @@ inline MatD Spring::force(const MatD &X) const
   for ( auto p = 0 ; p < m_particles.rows() ; ++p )
   {
     // - extract particle numbers
-    size_t i = m_particles(p,0);
-    size_t j = m_particles(p,1);
+    auto i = m_particles(p,0);
+    auto j = m_particles(p,1);
     // - copy the particles' positions to the vectors "xi" and "xj"
     std::copy(X.data()+i*ndim, X.data()+(i+1)*ndim, xi.data());
     std::copy(X.data()+j*ndim, X.data()+(j+1)*ndim, xj.data());
@@ -86,8 +86,8 @@ inline ColS Spring::coordination(const MatD &X) const
   for ( auto p = 0 ; p < m_particles.rows() ; ++p )
   {
     // - extract particle numbers
-    size_t i = m_particles(p,0);
-    size_t j = m_particles(p,1);
+    auto i = m_particles(p,0);
+    auto j = m_particles(p,1);
     // - add to coordination
     C(i) += 1;
     C(j) += 1;

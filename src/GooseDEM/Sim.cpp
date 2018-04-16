@@ -34,7 +34,7 @@ inline void velocityVerlet(Geometry &g, double dt, const ColS &iip, const ColD &
   // - update velocities (DOFs)
   V = V_n + dt * A_n;
   // - set prescribed velocities
-  for ( int i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
+  for ( auto i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
   // - update velocities (particles)
   g.set_v( g.asParticle(V) );
   // - solve for accelerations (DOFs)
@@ -42,7 +42,7 @@ inline void velocityVerlet(Geometry &g, double dt, const ColS &iip, const ColD &
   // - update velocities (DOFs)
   V = V_n + .5 * dt * ( A_n + A );
   // - set prescribed velocities
-  for ( int i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
+  for ( auto i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
   // - update velocities (particles)
   g.set_v( g.asParticle(V) );
 
@@ -52,7 +52,7 @@ inline void velocityVerlet(Geometry &g, double dt, const ColS &iip, const ColD &
   // - update velocities (DOFs)
   V = V_n + .5 * dt * ( A_n + A );
   // - set prescribed velocities
-  for ( int i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
+  for ( auto i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
   // - update velocities (particles)
   g.set_v( g.asParticle(V) );
 
@@ -60,7 +60,7 @@ inline void velocityVerlet(Geometry &g, double dt, const ColS &iip, const ColD &
   // - solve for accelerations (DOFs)
   A = Minv.cwiseProduct( - g.dofs_f() );
   // - enforce prescribed velocities
-  for ( int i = 0 ; i < iip.size() ; ++i ) A(iip(i)) = 0.0;
+  for ( auto i = 0 ; i < iip.size() ; ++i ) A(iip(i)) = 0.0;
   // - update accelerations (particles)
   g.set_a( g.asParticle(A) );
 }
@@ -104,7 +104,7 @@ inline size_t quasiStaticVelocityVerlet(
     // - update velocities (DOFs)
     V = V_n + dt * A_n;
     // - set prescribed velocities
-    for ( int i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
+    for ( auto i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
     // - update velocities (particles)
     g.set_v( g.asParticle(V) );
     // - solve for accelerations (DOFs)
@@ -112,7 +112,7 @@ inline size_t quasiStaticVelocityVerlet(
     // - update velocities (DOFs)
     V = V_n + .5 * dt * ( A_n + A );
     // - set prescribed velocities
-    for ( int i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
+    for ( auto i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
     // - update velocities (particles)
     g.set_v( g.asParticle(V) );
 
@@ -122,7 +122,7 @@ inline size_t quasiStaticVelocityVerlet(
     // - update velocities (DOFs)
     V = V_n + .5 * dt * ( A_n + A );
     // - set prescribed velocities
-    for ( int i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
+    for ( auto i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
     // - update velocities (particles)
     g.set_v( g.asParticle(V) );
 
@@ -130,7 +130,7 @@ inline size_t quasiStaticVelocityVerlet(
     // - solve for accelerations (DOFs)
     A = Minv.cwiseProduct( - g.dofs_f() );
     // - enforce prescribed velocities
-    for ( int i = 0 ; i < iip.size() ; ++i ) A(iip(i)) = 0.0;
+    for ( auto i = 0 ; i < iip.size() ; ++i ) A(iip(i)) = 0.0;
     // - update accelerations (particles)
     g.set_a( g.asParticle(A) );
 
@@ -139,15 +139,15 @@ inline size_t quasiStaticVelocityVerlet(
 
     // compute total kinetic energy
     // - ignore prescribed DOFs
-    for ( int i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = 0.0;
+    for ( auto i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = 0.0;
     // - zero-initialize
     new_res = 0.0;
     // - compute
-    for ( size_t i = 0 ; i < static_cast<size_t>(V.size()) ; ++i )
+    for ( auto i = 0 ; i < V.size() ; ++i )
       new_res += 0.5 * M(i) * std::pow(V(i),2.0);
 
     // move residual one place back (forgetting the first)
-    for ( size_t i = 1 ; i < ncheck ; ++i )
+    for ( auto i = 1 ; i < ncheck ; ++i )
       res[i-1] = res[i];
 
     // add new residual to the end
@@ -157,7 +157,7 @@ inline size_t quasiStaticVelocityVerlet(
     // - initialize
     stop = true;
     // - evaluate
-    for ( size_t i = 1 ; i < ncheck ; ++i ) {
+    for ( auto i = 1 ; i < ncheck ; ++i ) {
       if ( res[i] > res[i-1] or res[i] > norm ) {
         stop = false;
         break;
