@@ -17,6 +17,7 @@
 #include <stdexcept>
 #include <limits>
 #include <math.h>
+#include <iso646.h>
 #include <Eigen/Eigen>
 #include <cppmat/cppmat.h>
 
