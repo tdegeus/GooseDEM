@@ -23,7 +23,7 @@ inline void velocityVerlet(
 
 // iterate until all particles have come to a rest
 inline size_t quasiStaticVelocityVerlet(
-  Geometry &g, double dt, const ColS &iip, const ColD &v_p, double norm, size_t ncheck=20)
+  Geometry &g, double dt, const ColS &iip, const ColD &v_p, double norm, size_t ncheck=20);
 
 // -------------------------------------------------------------------------------------------------
 
