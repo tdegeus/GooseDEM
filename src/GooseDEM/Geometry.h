@@ -54,22 +54,22 @@ public:
   ColD m() const;
 
   // return DOF values [ndof]
-  ColD dofs_x() const;
   ColD dofs_v() const;
   ColD dofs_a() const;
   ColD dofs_f() const;
   ColD dofs_m() const;
 
   // overwrite particle vectors [N, ndim]
-  void set_x(const MatD &pvec);
-  void set_v(const MatD &pvec);
-  void set_a(const MatD &pvec);
+  void set_x(const MatD &pvector);
+  void set_v(const MatD &pvector);
+  void set_a(const MatD &pvector);
 
   // convert to DOF values (overwrite entries that occur more that once): [N, ndim] -> [ndof]
-  ColD asDofs(const MatD &pvec) const;
+  ColD asDofs(const ColD &pscalar) const;
+  ColD asDofs(const MatD &pvector) const;
 
   // assemble vectors (adds entries that occur more that once): [N, ndim] -> [ndof]
-  ColD assembleDofs(const MatD &pvec) const;
+  ColD assembleDofs(const MatD &pvector) const;
 
   // reconstruct particle vectors: [ndof] -> [N, ndim]
   MatD asParticle(const ColD &dofval) const;

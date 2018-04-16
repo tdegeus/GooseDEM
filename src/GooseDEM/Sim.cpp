@@ -147,7 +147,7 @@ inline size_t quasiStaticVelocityVerlet(
       new_res += 0.5 * M(i) * std::pow(V(i),2.0);
 
     // move residual one place back (forgetting the first)
-    for ( auto i = 1 ; i < ncheck ; ++i )
+    for ( size_t i = 1 ; i < ncheck ; ++i )
       res[i-1] = res[i];
 
     // add new residual to the end
@@ -157,7 +157,7 @@ inline size_t quasiStaticVelocityVerlet(
     // - initialize
     stop = true;
     // - evaluate
-    for ( auto i = 1 ; i < ncheck ; ++i ) {
+    for ( size_t i = 1 ; i < ncheck ; ++i ) {
       if ( res[i] > res[i-1] or res[i] > norm ) {
         stop = false;
         break;

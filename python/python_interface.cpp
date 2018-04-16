@@ -96,7 +96,6 @@ py::class_<GooseDEM::Geometry>(m, "Geometry")
   .def("f", &M::Geometry::f)
   .def("m", &M::Geometry::m)
   // -
-  .def("dofs_x", &M::Geometry::dofs_x)
   .def("dofs_v", &M::Geometry::dofs_v)
   .def("dofs_a", &M::Geometry::dofs_a)
   .def("dofs_f", &M::Geometry::dofs_f)
@@ -106,7 +105,9 @@ py::class_<GooseDEM::Geometry>(m, "Geometry")
   .def("set_v", &M::Geometry::set_v)
   .def("set_a", &M::Geometry::set_a)
   // -
-  .def("asDofs"      , &M::Geometry::asDofs      )
+  .def("asDofs", py::overload_cast<cColD &>(&M::Geometry::asDofs, py::const_))
+  .def("asDofs", py::overload_cast<cMatD &>(&M::Geometry::asDofs, py::const_))
+  // -
   .def("assembleDofs", &M::Geometry::assembleDofs)
   .def("asParticle"  , &M::Geometry::asParticle  )
   // print to screen

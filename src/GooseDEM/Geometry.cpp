@@ -100,13 +100,6 @@ inline MatD Geometry::f() const
 
 // -------------------------------------------------------------------------------------------------
 
-inline ColD Geometry::dofs_x() const
-{
-  return asDofs(m_x);
-}
-
-// -------------------------------------------------------------------------------------------------
-
 inline ColD Geometry::dofs_v() const
 {
   return asDofs(m_v);
@@ -135,47 +128,46 @@ inline ColD Geometry::dofs_f() const
 
 // -------------------------------------------------------------------------------------------------
 
-inline void Geometry::set_x(const MatD &pvec)
+inline void Geometry::set_x(const MatD &pvector)
 {
   // check input
-  assert( static_cast<size_t>(pvec.rows()) == m_N    );
-  assert( static_cast<size_t>(pvec.cols()) == m_ndim );
+  assert( static_cast<size_t>(pvector.rows()) == m_N    );
+  assert( static_cast<size_t>(pvector.cols()) == m_ndim );
 
   // store
-  m_x = pvec;
+  m_x = pvector;
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline void Geometry::set_v(const MatD &pvec)
+inline void Geometry::set_v(const MatD &pvector)
 {
   // check input
-  assert( static_cast<size_t>(pvec.rows()) == m_N    );
-  assert( static_cast<size_t>(pvec.cols()) == m_ndim );
+  assert( static_cast<size_t>(pvector.rows()) == m_N    );
+  assert( static_cast<size_t>(pvector.cols()) == m_ndim );
 
   // store
-  m_v = pvec;
+  m_v = pvector;
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline void Geometry::set_a(const MatD &pvec)
+inline void Geometry::set_a(const MatD &pvector)
 {
   // check input
-  assert( static_cast<size_t>(pvec.rows()) == m_N    );
-  assert( static_cast<size_t>(pvec.cols()) == m_ndim );
+  assert( static_cast<size_t>(pvector.rows()) == m_N    );
+  assert( static_cast<size_t>(pvector.cols()) == m_ndim );
 
   // store
-  m_a = pvec;
+  m_a = pvector;
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline ColD Geometry::asDofs(const MatD &pvec) const
+inline ColD Geometry::asDofs(const ColD &pscalar) const
 {
   // check input
-  assert( static_cast<size_t>(pvec.rows()) == m_N    );
-  assert( static_cast<size_t>(pvec.cols()) == m_ndim );
+  assert( static_cast<size_t>(pscalar.rows()) == m_N );
 
   // allocate output
   ColD dofval(m_ndof);
@@ -184,18 +176,38 @@ inline ColD Geometry::asDofs(const MatD &pvec) const
   #pragma omp for
   for ( size_t n = 0 ; n < m_N ; ++n )
     for ( size_t i = 0 ; i < m_ndim ; ++i )
-      dofval(m_dofs(n,i)) = pvec(n,i);
+      dofval(m_dofs(n,i)) = pscalar(n);
 
   return dofval;
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline ColD Geometry::assembleDofs(const MatD &pvec) const
+inline ColD Geometry::asDofs(const MatD &pvector) const
 {
   // check input
-  assert( static_cast<size_t>(pvec.rows()) == m_N    );
-  assert( static_cast<size_t>(pvec.cols()) == m_ndim );
+  assert( static_cast<size_t>(pvector.rows()) == m_N    );
+  assert( static_cast<size_t>(pvector.cols()) == m_ndim );
+
+  // allocate output
+  ColD dofval(m_ndof);
+
+  // apply conversion
+  #pragma omp for
+  for ( size_t n = 0 ; n < m_N ; ++n )
+    for ( size_t i = 0 ; i < m_ndim ; ++i )
+      dofval(m_dofs(n,i)) = pvector(n,i);
+
+  return dofval;
+}
+
+// -------------------------------------------------------------------------------------------------
+
+inline ColD Geometry::assembleDofs(const MatD &pvector) const
+{
+  // check input
+  assert( static_cast<size_t>(pvector.rows()) == m_N    );
+  assert( static_cast<size_t>(pvector.cols()) == m_ndim );
 
   // allocate output
   ColD dofval(m_ndof);
@@ -217,9 +229,9 @@ inline ColD Geometry::assembleDofs(const MatD &pvec) const
 
     // - per thread; assemble
     #pragma omp for
-    for ( auto n = 0 ; n < m_N ; ++n )
-      for ( auto i = 0 ; i < m_ndim ; ++i )
-        t_dofval(m_dofs(n,i)) += pvec(n,i);
+    for ( size_t n = 0 ; n < m_N ; ++n )
+      for ( size_t i = 0 ; i < m_ndim ; ++i )
+        t_dofval(m_dofs(n,i)) += pvector(n,i);
 
     // - reduce: combine result obtained on the different threads
     #pragma omp critical
@@ -240,15 +252,15 @@ inline MatD Geometry::asParticle(const ColD &dofval) const
   assert( dofval.size() == m_ndof );
 
   // allocate output
-  MatD pvec(m_N, m_ndim);
+  MatD pvector(m_N, m_ndim);
 
   // apply conversion
   #pragma omp for
-  for ( auto n = 0 ; n < m_N ; ++n )
-    for ( auto i = 0 ; i < m_ndim ; ++i )
-      pvec(n,i) = dofval(m_dofs(n,i));
+  for ( size_t n = 0 ; n < m_N ; ++n )
+    for ( size_t i = 0 ; i < m_ndim ; ++i )
+      pvector(n,i) = dofval(m_dofs(n,i));
 
-  return pvec;
+  return pvector;
 }
 
 // -------------------------------------------------------------------------------------------------
