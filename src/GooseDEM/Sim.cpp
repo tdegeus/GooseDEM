@@ -17,12 +17,12 @@ namespace GooseDEM {
 
 // -------------------------------------------------------------------------------------------------
 
-inline void velocityVerlet(Geometry &g, double dt, const ColS &iip, const ColD &v_p)
+inline void velocityVerlet(Geometry &g, double dt,
+  const ColS &ivp, const ColD &vp, const ColS &ifp, const ColD &fp)
 {
   // local variables and history
-  ColD V;
+  ColD F, V, A;
   ColD V_n  = g.dofs_v();
-  ColD A;
   ColD A_n  = g.dofs_a();
   ColD M    = g.dofs_m();
   ColD Minv = M.cwiseInverse();
@@ -30,37 +30,49 @@ inline void velocityVerlet(Geometry &g, double dt, const ColS &iip, const ColD &
   // (1) new positions: x_{n+1} = x_n + dt * v_n + .5 * dt^2 * a_n"
   g.set_x( g.x() + dt * g.v() + 0.5 * std::pow(dt,2.) * g.a() );
 
-  // (2a) estimate new velocities
-  // - update velocities (DOFs)
+  // (2a) estimate new velocity
+  // - update velocity (DOFs)
   V = V_n + dt * A_n;
-  // - set prescribed velocities
-  for ( auto i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
-  // - update velocities (particles)
+  // - set prescribed velocity
+  for ( auto i = 0 ; i < ivp.size() ; ++i ) V(ivp(i)) = vp(i);
+  // - update velocity (particles)
   g.set_v( g.asParticle(V) );
+  // - get force
+  F = g.dofs_f();
+  // - set prescribed force
+  for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) = fp(i);
   // - solve for accelerations (DOFs)
-  A = Minv.cwiseProduct( - g.dofs_f() );
-  // - update velocities (DOFs)
+  A = Minv.cwiseProduct( F );
+  // - update velocity (DOFs)
   V = V_n + .5 * dt * ( A_n + A );
-  // - set prescribed velocities
-  for ( auto i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
-  // - update velocities (particles)
+  // - set prescribed velocity
+  for ( auto i = 0 ; i < ivp.size() ; ++i ) V(ivp(i)) = vp(i);
+  // - update velocity (particles)
   g.set_v( g.asParticle(V) );
 
-  // (2b) new velocities
+  // (2b) new velocity
+  // - get force
+  F = g.dofs_f();
+  // - set prescribed force
+  for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) = fp(i);
   // - solve for accelerations (DOFs)
-  A = Minv.cwiseProduct( - g.dofs_f() );
-  // - update velocities (DOFs)
+  A = Minv.cwiseProduct( F );
+  // - update velocity (DOFs)
   V = V_n + .5 * dt * ( A_n + A );
-  // - set prescribed velocities
-  for ( auto i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
-  // - update velocities (particles)
+  // - set prescribed velocity
+  for ( auto i = 0 ; i < ivp.size() ; ++i ) V(ivp(i)) = vp(i);
+  // - update velocity (particles)
   g.set_v( g.asParticle(V) );
 
   // (3) new accelerations
+  // - get force
+  F = g.dofs_f();
+  // - set prescribed force
+  for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) = fp(i);
   // - solve for accelerations (DOFs)
-  A = Minv.cwiseProduct( - g.dofs_f() );
-  // - enforce prescribed velocities
-  for ( auto i = 0 ; i < iip.size() ; ++i ) A(iip(i)) = 0.0;
+  A = Minv.cwiseProduct( F );
+  // - enforce prescribed velocity
+  for ( auto i = 0 ; i < ivp.size() ; ++i ) A(ivp(i)) = 0.0;
   // - update accelerations (particles)
   g.set_a( g.asParticle(A) );
 }
@@ -68,10 +80,11 @@ inline void velocityVerlet(Geometry &g, double dt, const ColS &iip, const ColD &
 // -------------------------------------------------------------------------------------------------
 
 inline size_t quasiStaticVelocityVerlet(
-  Geometry &g, double dt, double norm, size_t ncheck, const ColS &iip, const ColD &v_p)
+  Geometry &g, double dt, double norm, size_t ncheck,
+  const ColS &ivp, const ColD &vp, const ColS &ifp, const ColD &fp)
 {
   // local variables
-  ColD   V, V_n, A, A_n;
+  ColD   F, V, V_n, A, A_n;
   ColD   M     = g.dofs_m();
   ColD   Minv  = M.cwiseInverse();
   size_t iiter = 0;
@@ -100,37 +113,49 @@ inline size_t quasiStaticVelocityVerlet(
     // (1) new positions: x_{n+1} = x_n + dt * v_n + .5 * dt^2 * a_n"
     g.set_x( g.x() + dt * g.v() + 0.5 * std::pow(dt,2.) * g.a() );
 
-    // (2a) estimate new velocities
-    // - update velocities (DOFs)
+    // (2a) estimate new velocity
+    // - update velocity (DOFs)
     V = V_n + dt * A_n;
-    // - set prescribed velocities
-    for ( auto i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
-    // - update velocities (particles)
+    // - set prescribed velocity
+    for ( auto i = 0 ; i < ivp.size() ; ++i ) V(ivp(i)) = vp(i);
+    // - update velocity (particles)
     g.set_v( g.asParticle(V) );
+      // - get force
+    F = g.dofs_f();
+    // - set prescribed force
+    for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) = fp(i);
     // - solve for accelerations (DOFs)
-    A = Minv.cwiseProduct( - g.dofs_f() );
-    // - update velocities (DOFs)
+    A = Minv.cwiseProduct( F );
+    // - update velocity (DOFs)
     V = V_n + .5 * dt * ( A_n + A );
-    // - set prescribed velocities
-    for ( auto i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
-    // - update velocities (particles)
+    // - set prescribed velocity
+    for ( auto i = 0 ; i < ivp.size() ; ++i ) V(ivp(i)) = vp(i);
+    // - update velocity (particles)
     g.set_v( g.asParticle(V) );
 
-    // (2b) new velocities
+    // (2b) new velocity
+      // - get force
+    F = g.dofs_f();
+    // - set prescribed force
+    for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) = fp(i);
     // - solve for accelerations (DOFs)
-    A = Minv.cwiseProduct( - g.dofs_f() );
-    // - update velocities (DOFs)
+    A = Minv.cwiseProduct( F );
+    // - update velocity (DOFs)
     V = V_n + .5 * dt * ( A_n + A );
-    // - set prescribed velocities
-    for ( auto i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = v_p(i);
-    // - update velocities (particles)
+    // - set prescribed velocity
+    for ( auto i = 0 ; i < ivp.size() ; ++i ) V(ivp(i)) = vp(i);
+    // - update velocity (particles)
     g.set_v( g.asParticle(V) );
 
     // (3) new accelerations
+      // - get force
+    F = g.dofs_f();
+    // - set prescribed force
+    for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) = fp(i);
     // - solve for accelerations (DOFs)
-    A = Minv.cwiseProduct( - g.dofs_f() );
-    // - enforce prescribed velocities
-    for ( auto i = 0 ; i < iip.size() ; ++i ) A(iip(i)) = 0.0;
+    A = Minv.cwiseProduct( F );
+    // - enforce prescribed velocity
+    for ( auto i = 0 ; i < ivp.size() ; ++i ) A(ivp(i)) = 0.0;
     // - update accelerations (particles)
     g.set_a( g.asParticle(A) );
 
@@ -139,7 +164,7 @@ inline size_t quasiStaticVelocityVerlet(
 
     // compute total kinetic energy
     // - ignore prescribed DOFs
-    for ( auto i = 0 ; i < iip.size() ; ++i ) V(iip(i)) = 0.0;
+    for ( auto i = 0 ; i < ivp.size() ; ++i ) V(ivp(i)) = 0.0;
     // - zero-initialize
     new_res = 0.0;
     // - compute

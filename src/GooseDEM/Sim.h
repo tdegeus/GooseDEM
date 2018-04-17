@@ -19,12 +19,15 @@ namespace GooseDEM {
 
 // evaluate one time step
 inline void velocityVerlet(
-  Geometry &geometry, double dt, const ColS &iip=ColS(), const ColD &v_p=ColD());
+  Geometry &geometry, double dt,
+  const ColS &ivp=ColS(), const ColD &vp=ColD(), const ColS &ifp=ColS(), const ColD &fp=ColD()
+);
 
 // iterate until all particles have come to a rest
 inline size_t quasiStaticVelocityVerlet(
   Geometry &geometry, double dt, double norm, size_t ncheck=20,
-  const ColS &iip=ColS(), const ColD &v_p=ColD());
+  const ColS &ivp=ColS(), const ColD &vp=ColD(), const ColS &ifp=ColS(), const ColD &fp=ColD()
+);
 
 // -------------------------------------------------------------------------------------------------
 

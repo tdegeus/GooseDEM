@@ -129,8 +129,10 @@ m.def("velocityVerlet",&M::velocityVerlet,
   "evaluate one time step",
   py::arg("geometry"),
   py::arg("dt"),
-  py::arg("iip")=ColS(),
-  py::arg("v_p")=ColD()
+  py::arg("ivp")=ColS(),
+  py::arg("vp")=ColD(),
+  py::arg("ifp")=ColS(),
+  py::arg("fp")=ColS()
 );
 
 // -------------------------------------------------------------------------------------------------
@@ -141,8 +143,10 @@ m.def("quasiStaticVelocityVerlet",&M::quasiStaticVelocityVerlet,
   py::arg("dt"),
   py::arg("norm"),
   py::arg("ncheck")=20,
-  py::arg("iip")=ColS(),
-  py::arg("v_p")=ColD()
+  py::arg("ivp")=ColS(),
+  py::arg("vp")=ColD(),
+  py::arg("ifp")=ColS(),
+  py::arg("fp")=ColS()
 );
 
 // =================================================================================================
