@@ -169,8 +169,11 @@ inline ColD Geometry::asDofs(const ColD &pscalar) const
   // check input
   assert( static_cast<size_t>(pscalar.rows()) == m_N );
 
-  // allocate output
+  // list of DOF values
+  // - allocate
   ColD dofval(m_ndof);
+  // - zero-initialize
+  dofval.setZero();
 
   // apply conversion
   #pragma omp for
@@ -189,8 +192,11 @@ inline ColD Geometry::asDofs(const MatD &pvector) const
   assert( static_cast<size_t>(pvector.rows()) == m_N    );
   assert( static_cast<size_t>(pvector.cols()) == m_ndim );
 
-  // allocate output
+  // list of DOF values
+  // - allocate
   ColD dofval(m_ndof);
+  // - zero-initialize
+  dofval.setZero();
 
   // apply conversion
   #pragma omp for
@@ -209,10 +215,10 @@ inline ColD Geometry::assembleDofs(const MatD &pvector) const
   assert( static_cast<size_t>(pvector.rows()) == m_N    );
   assert( static_cast<size_t>(pvector.cols()) == m_ndim );
 
-  // allocate output
+  // list of DOF values
+  // - allocate
   ColD dofval(m_ndof);
-
-  // zero-initialize output
+  // - zero-initialize
   dofval.setZero();
 
   // temporarily disable parallelization by Eigen
@@ -221,10 +227,10 @@ inline ColD Geometry::assembleDofs(const MatD &pvector) const
   // start threads
   #pragma omp parallel
   {
-    // - per thread; allocate output
+    // - per thread; list of DOF values
+    // - allocate
     ColD t_dofval(m_ndof);
-
-    // - per thread; zero-initialize output
+    // - zero-initialize
     t_dofval.setZero();
 
     // - per thread; assemble
@@ -251,8 +257,11 @@ inline MatD Geometry::asParticle(const ColD &dofval) const
   // check input
   assert( dofval.size() == m_ndof );
 
-  // allocate output
+  // list of particle vectors
+  // - allocate
   MatD pvector(m_N, m_ndim);
+  // - zero-initialize
+  pvector.setZero();
 
   // apply conversion
   #pragma omp for
