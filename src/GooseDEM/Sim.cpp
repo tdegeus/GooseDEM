@@ -68,7 +68,7 @@ inline void velocityVerlet(Geometry &g, double dt, const ColS &iip, const ColD &
 // -------------------------------------------------------------------------------------------------
 
 inline size_t quasiStaticVelocityVerlet(
-  Geometry &g, double dt, const ColS &iip, const ColD &v_p, double norm, size_t ncheck)
+  Geometry &g, double dt, double norm, size_t ncheck, const ColS &iip, const ColD &v_p)
 {
   // local variables
   ColD   V, V_n, A, A_n;

@@ -129,8 +129,8 @@ m.def("velocityVerlet",&M::velocityVerlet,
   "evaluate one time step",
   py::arg("geometry"),
   py::arg("dt"),
-  py::arg("iip"),
-  py::arg("v_p")
+  py::arg("iip")=ColS(),
+  py::arg("v_p")=ColD()
 );
 
 // -------------------------------------------------------------------------------------------------
@@ -139,10 +139,10 @@ m.def("quasiStaticVelocityVerlet",&M::quasiStaticVelocityVerlet,
   "iterate until all particles have come to a rest",
   py::arg("geometry"),
   py::arg("dt"),
-  py::arg("iip"),
-  py::arg("v_p"),
   py::arg("norm"),
-  py::arg("ncheck")=20
+  py::arg("ncheck")=20,
+  py::arg("iip")=ColS(),
+  py::arg("v_p")=ColD()
 );
 
 // =================================================================================================
