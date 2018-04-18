@@ -40,7 +40,7 @@ inline void velocityVerlet(Geometry &g, double dt,
   // - get force
   F = g.dofs_f();
   // - set prescribed force
-  for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) = fp(i);
+  for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) += fp(i);
   // - solve for accelerations (DOFs)
   A = Minv.cwiseProduct( F );
   // - update velocity (DOFs)
@@ -54,7 +54,7 @@ inline void velocityVerlet(Geometry &g, double dt,
   // - get force
   F = g.dofs_f();
   // - set prescribed force
-  for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) = fp(i);
+  for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) += fp(i);
   // - solve for accelerations (DOFs)
   A = Minv.cwiseProduct( F );
   // - update velocity (DOFs)
@@ -68,7 +68,7 @@ inline void velocityVerlet(Geometry &g, double dt,
   // - get force
   F = g.dofs_f();
   // - set prescribed force
-  for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) = fp(i);
+  for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) += fp(i);
   // - solve for accelerations (DOFs)
   A = Minv.cwiseProduct( F );
   // - enforce prescribed velocity
@@ -123,7 +123,7 @@ inline size_t quasiStaticVelocityVerlet(
       // - get force
     F = g.dofs_f();
     // - set prescribed force
-    for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) = fp(i);
+    for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) += fp(i);
     // - solve for accelerations (DOFs)
     A = Minv.cwiseProduct( F );
     // - update velocity (DOFs)
@@ -137,7 +137,7 @@ inline size_t quasiStaticVelocityVerlet(
       // - get force
     F = g.dofs_f();
     // - set prescribed force
-    for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) = fp(i);
+    for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) += fp(i);
     // - solve for accelerations (DOFs)
     A = Minv.cwiseProduct( F );
     // - update velocity (DOFs)
@@ -151,7 +151,7 @@ inline size_t quasiStaticVelocityVerlet(
       // - get force
     F = g.dofs_f();
     // - set prescribed force
-    for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) = fp(i);
+    for ( auto i = 0 ; i < ifp.size() ; ++i ) F(ifp(i)) += fp(i);
     // - solve for accelerations (DOFs)
     A = Minv.cwiseProduct( F );
     // - enforce prescribed velocity
