@@ -274,8 +274,18 @@ inline MatD Geometry::asParticle(const ColD &dofval) const
 
 // -------------------------------------------------------------------------------------------------
 
-template<class X>
-inline void dump(const std::string &fname, const X &matrix)
+inline void dump(const std::string &fname, const ColD &matrix)
+{
+  const static Eigen::IOFormat fmt(Eigen::StreamPrecision, 0, ", ", "\n");
+
+  std::ofstream file(fname.c_str());
+
+  file << matrix.format(fmt);
+}
+
+// -------------------------------------------------------------------------------------------------
+
+inline void dump(const std::string &fname, const MatD &matrix)
 {
   const static Eigen::IOFormat fmt(Eigen::StreamPrecision, 0, ", ", "\n");
 

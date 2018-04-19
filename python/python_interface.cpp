@@ -117,15 +117,23 @@ py::class_<GooseDEM::Geometry>(m, "Geometry")
 
 // -------------------------------------------------------------------------------------------------
 
-// m.def("dump",&M::dump,
-//   "Dump to text file",
-//   py::arg("fname"),
-//   py::arg("matrix")
-// );
+m.def("dump", py::overload_cast<const std::string &, cColD &>(&M::dump),
+  "Dump to text file",
+  py::arg("fname"),
+  py::arg("matrix")
+);
+
+// -------------------------------------------------------------------------------------------------
+
+m.def("dump", py::overload_cast<const std::string &, cMatD &>(&M::dump),
+  "Dump to text file",
+  py::arg("fname"),
+  py::arg("matrix")
+);
 
 // =================================== GooseDEM - GooseDEM/Sim.h ===================================
 
-m.def("velocityVerlet",&M::velocityVerlet,
+m.def("velocityVerlet", &M::velocityVerlet,
   "evaluate one time step",
   py::arg("geometry"),
   py::arg("dt"),
@@ -137,7 +145,7 @@ m.def("velocityVerlet",&M::velocityVerlet,
 
 // -------------------------------------------------------------------------------------------------
 
-m.def("quasiStaticVelocityVerlet",&M::quasiStaticVelocityVerlet,
+m.def("quasiStaticVelocityVerlet", &M::quasiStaticVelocityVerlet,
   "iterate until all particles have come to a rest",
   py::arg("geometry"),
   py::arg("dt"),

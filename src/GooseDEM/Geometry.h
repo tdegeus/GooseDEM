@@ -78,8 +78,8 @@ public:
 
 // -------------------------------------------------------------------------------------------------
 
-template<class X>
-inline void dump(const std::string &fname, const X &matrix);
+inline void dump(const std::string &fname, const ColD &matrix);
+inline void dump(const std::string &fname, const MatD &matrix);
 
 // -------------------------------------------------------------------------------------------------
 
