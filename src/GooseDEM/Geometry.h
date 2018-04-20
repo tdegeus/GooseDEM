@@ -64,6 +64,10 @@ public:
   void set_v(const MatD &pvector);
   void set_a(const MatD &pvector);
 
+  // overwrite particle vectors, reconstructed from DOF values
+  void set_v(const ColD &dofval); // == set_v(asParticle(V))
+  void set_a(const ColD &dofval); // == set_a(asParticle(A))
+
   // convert to DOF values (overwrite entries that occur more that once): [N, ndim] -> [ndof]
   ColD asDofs(const ColD &pscalar) const;
   ColD asDofs(const MatD &pvector) const;

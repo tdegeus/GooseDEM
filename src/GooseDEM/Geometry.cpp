@@ -164,6 +164,20 @@ inline void Geometry::set_a(const MatD &pvector)
 
 // -------------------------------------------------------------------------------------------------
 
+inline void Geometry::set_v(const ColD &dofval)
+{
+  set_v(asParticle(dofval));
+}
+
+// -------------------------------------------------------------------------------------------------
+
+inline void Geometry::set_a(const ColD &dofval)
+{
+  set_a(asParticle(dofval));
+}
+
+// -------------------------------------------------------------------------------------------------
+
 inline ColD Geometry::asDofs(const ColD &pscalar) const
 {
   // check input

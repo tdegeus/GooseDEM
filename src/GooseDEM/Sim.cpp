@@ -36,7 +36,7 @@ inline void velocityVerlet(Geometry &g, double dt,
   // - set prescribed velocity
   for ( auto i = 0 ; i < ivp.size() ; ++i ) V(ivp(i)) = vp(i);
   // - update velocity (particles)
-  g.set_v( g.asParticle(V) );
+  g.set_v(V);
   // - get force
   F = g.dofs_f();
   // - set prescribed force
@@ -48,7 +48,7 @@ inline void velocityVerlet(Geometry &g, double dt,
   // - set prescribed velocity
   for ( auto i = 0 ; i < ivp.size() ; ++i ) V(ivp(i)) = vp(i);
   // - update velocity (particles)
-  g.set_v( g.asParticle(V) );
+  g.set_v(V);
 
   // (2b) new velocity
   // - get force
@@ -62,7 +62,7 @@ inline void velocityVerlet(Geometry &g, double dt,
   // - set prescribed velocity
   for ( auto i = 0 ; i < ivp.size() ; ++i ) V(ivp(i)) = vp(i);
   // - update velocity (particles)
-  g.set_v( g.asParticle(V) );
+  g.set_v(V);
 
   // (3) new accelerations
   // - get force
@@ -74,7 +74,7 @@ inline void velocityVerlet(Geometry &g, double dt,
   // - enforce prescribed velocity
   for ( auto i = 0 ; i < ivp.size() ; ++i ) A(ivp(i)) = 0.0;
   // - update accelerations (particles)
-  g.set_a( g.asParticle(A) );
+  g.set_a(A);
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -119,7 +119,7 @@ inline size_t quasiStaticVelocityVerlet(
     // - set prescribed velocity
     for ( auto i = 0 ; i < ivp.size() ; ++i ) V(ivp(i)) = vp(i);
     // - update velocity (particles)
-    g.set_v( g.asParticle(V) );
+    g.set_v(V);
       // - get force
     F = g.dofs_f();
     // - set prescribed force
@@ -131,7 +131,7 @@ inline size_t quasiStaticVelocityVerlet(
     // - set prescribed velocity
     for ( auto i = 0 ; i < ivp.size() ; ++i ) V(ivp(i)) = vp(i);
     // - update velocity (particles)
-    g.set_v( g.asParticle(V) );
+    g.set_v(V);
 
     // (2b) new velocity
       // - get force
@@ -145,7 +145,7 @@ inline size_t quasiStaticVelocityVerlet(
     // - set prescribed velocity
     for ( auto i = 0 ; i < ivp.size() ; ++i ) V(ivp(i)) = vp(i);
     // - update velocity (particles)
-    g.set_v( g.asParticle(V) );
+    g.set_v(V);
 
     // (3) new accelerations
       // - get force
@@ -157,7 +157,7 @@ inline size_t quasiStaticVelocityVerlet(
     // - enforce prescribed velocity
     for ( auto i = 0 ; i < ivp.size() ; ++i ) A(ivp(i)) = 0.0;
     // - update accelerations (particles)
-    g.set_a( g.asParticle(A) );
+    g.set_a(A);
 
     // check for convergence
     // ---------------------
