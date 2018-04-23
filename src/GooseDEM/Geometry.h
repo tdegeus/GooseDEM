@@ -26,10 +26,10 @@ public:
 
   // reset residuals, check for convergence
   virtual void reset()          { return;       }
-  virtual bool stop(double tol) { return false; };
+  virtual bool stop(double tol) { UNUSED(tol); return false; };
 
   // process time-step
-  virtual void timestep(double dt) { return; };
+  virtual void timestep(double dt) { UNUSED(dt); return; };
 
   // return particle vectors [N, ndim]
   virtual MatD x() const { return MatD(); };
@@ -41,11 +41,11 @@ public:
   virtual ColD dofs_a() const { return ColD(); };
 
   // overwrite particle vectors [N, ndim]
-  virtual void set_x(const MatD &pvector) { return; };
+  virtual void set_x(const MatD &pvector) { UNUSED(pvector); return; };
 
   // overwrite particle vectors, reconstructed from DOF values [ndof]
-  virtual void set_v(const ColD &dofval) { return; };
-  virtual void set_a(const ColD &dofval) { return; };
+  virtual void set_v(const ColD &dofval) { UNUSED(dofval); return; };
+  virtual void set_a(const ColD &dofval) { UNUSED(dofval); return; };
 
 };
 
