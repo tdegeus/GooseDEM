@@ -21,11 +21,12 @@ namespace py = pybind11;
 namespace M  = GooseDEM;
 
 // abbreviate types(s)
+// - Eigen types
 typedef GooseDEM::ColD ColD;
 typedef GooseDEM::ColS ColS;
 typedef GooseDEM::MatD MatD;
 typedef GooseDEM::MatS MatS;
-
+// - const arrays
 typedef const GooseDEM::ColD cColD;
 typedef const GooseDEM::ColS cColS;
 typedef const GooseDEM::MatD cMatD;
@@ -74,48 +75,44 @@ py::class_<GooseDEM::Dashpot>(m, "Dashpot")
     [](const GooseDEM::Dashpot &a){ return "<GooseDEM.Dashpot>"; }
   );
 
-// ================================= GooseDEM - GooseDEM/Geometry.h ==================================
+// ============================ GooseDEM - GooseDEM/GeometryFriction.h =============================
 
-py::class_<GooseDEM::Geometry>(m, "Geometry")
+py::class_<GooseDEM::GeometryFriction>(m, "GeometryFriction")
   // constructor
   .def(
     py::init<cColD &, cMatD &, cMatS &>(),
-    "Geometry",
+    "GeometryFriction",
     py::arg("m"),
     py::arg("x"),
     py::arg("dofs")
   )
   // methods
   // -
-  .def("set", py::overload_cast<const M::Spring  &>(&M::Geometry::set))
-  .def("set", py::overload_cast<const M::Dashpot &>(&M::Geometry::set))
+  .def("set", py::overload_cast<const M::Spring  &>(&M::GeometryFriction::set))
+  .def("set", py::overload_cast<const M::Dashpot &>(&M::GeometryFriction::set))
   // -
-  .def("x", &M::Geometry::x)
-  .def("v", &M::Geometry::v)
-  .def("a", &M::Geometry::a)
-  .def("f", &M::Geometry::f)
-  .def("m", &M::Geometry::m)
+  .def("x", &M::GeometryFriction::x)
+  .def("v", &M::GeometryFriction::v)
+  .def("a", &M::GeometryFriction::a)
+  .def("f", &M::GeometryFriction::f)
+  .def("m", &M::GeometryFriction::m)
   // -
-  .def("dofs_v", &M::Geometry::dofs_v)
-  .def("dofs_a", &M::Geometry::dofs_a)
-  .def("dofs_f", &M::Geometry::dofs_f)
-  .def("dofs_m", &M::Geometry::dofs_m)
+  .def("dofs_v", &M::GeometryFriction::dofs_v)
+  .def("dofs_a", &M::GeometryFriction::dofs_a)
+  .def("dofs_f", &M::GeometryFriction::dofs_f)
+  .def("dofs_m", &M::GeometryFriction::dofs_m)
   // -
-  .def("set_x", &M::Geometry::set_x)
-  .def("set_v", &M::Geometry::set_v)
-  .def("set_a", &M::Geometry::set_a)
-  // -
-  .def("asDofs", py::overload_cast<cColD &>(&M::Geometry::asDofs, py::const_))
-  .def("asDofs", py::overload_cast<cMatD &>(&M::Geometry::asDofs, py::const_))
-  // -
-  .def("assembleDofs", &M::Geometry::assembleDofs)
-  .def("asParticle"  , &M::Geometry::asParticle  )
+  .def("set_v", py::overload_cast<cColD &>(&M::GeometryFriction::set_v))
+  .def("set_a", py::overload_cast<cColD &>(&M::GeometryFriction::set_a))
+  .def("set_x",                            &M::GeometryFriction::set_x )
+  .def("set_v", py::overload_cast<cMatD &>(&M::GeometryFriction::set_v))
+  .def("set_a", py::overload_cast<cMatD &>(&M::GeometryFriction::set_a))
   // print to screen
   .def("__repr__",
-    [](const GooseDEM::Geometry &a){ return "<GooseDEM.Geometry>"; }
+    [](const GooseDEM::GeometryFriction &a){ return "<GooseDEM.GeometryFriction>"; }
   );
 
-// -------------------------------------------------------------------------------------------------
+// ================================== GooseDEM - GooseDEM/Write.h ==================================
 
 m.def("dump", py::overload_cast<const std::string &, cColD &>(&M::dump),
   "Dump to text file",
@@ -131,16 +128,12 @@ m.def("dump", py::overload_cast<const std::string &, cMatD &>(&M::dump),
   py::arg("matrix")
 );
 
-// =================================== GooseDEM - GooseDEM/Sim.h ===================================
+// ============================= GooseDEM - GooseDEM/TimeIntegration.h =============================
 
 m.def("velocityVerlet", &M::velocityVerlet,
   "evaluate one time step",
   py::arg("geometry"),
-  py::arg("dt"),
-  py::arg("ivp")=ColS(),
-  py::arg("vp")=ColD(),
-  py::arg("ifp")=ColS(),
-  py::arg("fp")=ColS()
+  py::arg("dt")
 );
 
 // -------------------------------------------------------------------------------------------------
@@ -149,12 +142,7 @@ m.def("quasiStaticVelocityVerlet", &M::quasiStaticVelocityVerlet,
   "iterate until all particles have come to a rest",
   py::arg("geometry"),
   py::arg("dt"),
-  py::arg("norm"),
-  py::arg("ncheck")=20,
-  py::arg("ivp")=ColS(),
-  py::arg("vp")=ColD(),
-  py::arg("ifp")=ColS(),
-  py::arg("fp")=ColS()
+  py::arg("tol")
 );
 
 // =================================================================================================

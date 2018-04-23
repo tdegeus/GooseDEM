@@ -16,14 +16,19 @@ project(GooseDEM)
 # list of header files
 set(headers
   GooseDEM/GooseDEM.h
+  GooseDEM/Write.cpp
+  GooseDEM/Write.h
   GooseDEM/Spring.cpp
   GooseDEM/Spring.h
   GooseDEM/Dashpot.cpp
   GooseDEM/Dashpot.h
-  GooseDEM/Geometry.cpp
   GooseDEM/Geometry.h
-  GooseDEM/Sim.cpp
-  GooseDEM/Sim.h
+  GooseDEM/TimeIntegration.cpp
+  GooseDEM/TimeIntegration.h
+  GooseDEM/Iterate.cpp
+  GooseDEM/Iterate.h
+  GooseDEM/Vector.cpp
+  GooseDEM/Vector.h
 )
 
 # options

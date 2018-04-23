@@ -33,11 +33,8 @@ inline MatD Spring::force(const MatD &X) const
   auto n    = X.rows(); // number of particles
   auto ndim = X.cols(); // number of dimensions
 
-  // force per particle
-  // - allocate
-  MatD F(n, ndim);
-  // - zero-initialize
-  F.setZero();
+  // zero-initialize force per particle
+  MatD F = MatD::Zero(n, ndim);
 
   // local variables
   cppmat::cartesian::vector<double> xi(ndim); // position of particle "i"
@@ -76,11 +73,8 @@ inline MatD Spring::force(const MatD &X) const
 
 inline ColS Spring::coordination(const MatD &X) const
 {
-  // coordination per particle
-  // - allocate
-  ColS C(X.rows());
-  // - zero-initialize
-  C.setZero();
+  // zero-initialize coordination per particle
+  ColS C = ColS::Zero(X.rows());
 
   // loop over all springs
   for ( auto p = 0 ; p < m_particles.rows() ; ++p )

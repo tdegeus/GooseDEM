@@ -4,8 +4,8 @@
 
 ================================================================================================= */
 
-#ifndef GOOSEDEM_SIM_H
-#define GOOSEDEM_SIM_H
+#ifndef GOOSEDEM_TIMEINTEGRATION_H
+#define GOOSEDEM_TIMEINTEGRATION_H
 
 // -------------------------------------------------------------------------------------------------
 
@@ -18,16 +18,10 @@ namespace GooseDEM {
 // -------------------------------------------------------------------------------------------------
 
 // evaluate one time step
-inline void velocityVerlet(
-  Geometry &geometry, double dt,
-  const ColS &ivp=ColS(), const ColD &vp=ColD(), const ColS &ifp=ColS(), const ColD &fp=ColD()
-);
+inline void velocityVerlet(Geometry &geometry, double dt);
 
 // iterate until all particles have come to a rest
-inline size_t quasiStaticVelocityVerlet(
-  Geometry &geometry, double dt, double norm, size_t ncheck=20,
-  const ColS &ivp=ColS(), const ColD &vp=ColD(), const ColS &ifp=ColS(), const ColD &fp=ColD()
-);
+inline size_t quasiStaticVelocityVerlet(Geometry &geometry, double dt, double tol);
 
 // -------------------------------------------------------------------------------------------------
 

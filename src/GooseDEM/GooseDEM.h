@@ -30,7 +30,7 @@
 
 #define GOOSEDEM_WORLD_VERSION 0
 #define GOOSEDEM_MAJOR_VERSION 0
-#define GOOSEDEM_MINOR_VERSION 1
+#define GOOSEDEM_MINOR_VERSION 2
 
 #define GOOSEDEM_VERSION_AT_LEAST(x,y,z) \
   (GOOSEDEM_WORLD_VERSION>x || (GOOSEDEM_WORLD_VERSION>=x && \
@@ -55,15 +55,22 @@ namespace GooseDEM {
 
 // -------------------------------------------------------------------------------------------------
 
+#include "Write.h"
 #include "Spring.h"
 #include "Dashpot.h"
+#include "Iterate.h"
+#include "Vector.h"
 #include "Geometry.h"
-#include "Sim.h"
+#include "GeometryFriction.h"
+#include "TimeIntegration.h"
 
+#include "Write.cpp"
 #include "Spring.cpp"
 #include "Dashpot.cpp"
-#include "Geometry.cpp"
-#include "Sim.cpp"
+#include "Iterate.cpp"
+#include "Vector.cpp"
+#include "GeometryFriction.cpp"
+#include "TimeIntegration.cpp"
 
 // -------------------------------------------------------------------------------------------------
 

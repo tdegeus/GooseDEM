@@ -32,11 +32,8 @@ inline MatD Dashpot::force(const MatD &V) const
   auto n    = V.rows(); // number of particles
   auto ndim = V.cols(); // number of dimensions
 
-  // force per particle
-  // - allocate
-  MatD F(n, ndim);
-  // - zero-initialize
-  F.setZero();
+  // zero-initialize force per particle
+  MatD F = MatD::Zero(n, ndim);
 
   // local variables
   cppmat::cartesian::vector<double> vi(ndim); // velocity of particle "i"
@@ -72,11 +69,8 @@ inline MatD Dashpot::force(const MatD &V) const
 
 inline ColS Dashpot::coordination(const MatD &X) const
 {
-  // coordination per particle
-  // - allocate
-  ColS C(X.rows());
-  // - zero-initialize
-  C.setZero();
+  // zero-initialize coordination per particle
+  ColS C = ColS::Zero(X.rows());
 
   // loop over all springs
   for ( auto p = 0 ; p < m_particles.rows() ; ++p )
