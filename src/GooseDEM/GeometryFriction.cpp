@@ -84,7 +84,7 @@ inline void GeometryFriction::fext(const MatD &pvector)
 
 // -------------------------------------------------------------------------------------------------
 
-inline ColD GeometryFriction::solve() const
+inline ColD GeometryFriction::solve()
 {
   return m_Minv.cwiseProduct( m_vec.assembleDofs( f() + m_fext ) );
 }

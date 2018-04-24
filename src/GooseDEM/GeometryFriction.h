@@ -69,7 +69,7 @@ public:
   void fext(const MatD &pvector);
 
   // solve for DOF-accelerations [ndof]
-  ColD solve() const;
+  ColD solve();
 
   // reset residuals, check for convergence
   void reset();

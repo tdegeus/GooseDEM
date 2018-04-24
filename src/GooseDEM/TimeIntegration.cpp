@@ -34,6 +34,10 @@ inline void Verlet(Geometry &g, double dt)
 
   A = g.solve();
 
+  g.set_a( A );
+
+  // new velocity
+
   g.set_v( V_n + .5 * dt * ( A_n + A ) );
 
   // finalize
