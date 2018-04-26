@@ -17,7 +17,7 @@ namespace GooseDEM {
 
 // -------------------------------------------------------------------------------------------------
 
-inline void Verlet(Geometry &g, double dt)
+inline void Verlet(GeometryFriction &g, double dt)
 {
   // history
 
@@ -34,11 +34,11 @@ inline void Verlet(Geometry &g, double dt)
 
   A = g.solve();
 
-  g.set_a( A );
+  g.set_a_dofs( A );
 
   // new velocity
 
-  g.set_v( V_n + .5 * dt * ( A_n + A ) );
+  g.set_v_dofs( V_n + .5 * dt * ( A_n + A ) );
 
   // finalize
 
@@ -47,7 +47,7 @@ inline void Verlet(Geometry &g, double dt)
 
 // -------------------------------------------------------------------------------------------------
 
-inline void velocityVerlet(Geometry &g, double dt)
+inline void velocityVerlet(GeometryFriction &g, double dt)
 {
   // history
 
@@ -62,23 +62,23 @@ inline void velocityVerlet(Geometry &g, double dt)
 
   // estimate new velocity
 
-  g.set_v( V_n + dt * A_n );
+  g.set_v_dofs( V_n + dt * A_n );
 
   A = g.solve();
 
-  g.set_v( V_n + .5 * dt * ( A_n + A ) );
+  g.set_v_dofs( V_n + .5 * dt * ( A_n + A ) );
 
   // new velocity
 
   A = g.solve();
 
-  g.set_v( V_n + .5 * dt * ( A_n + A ) );
+  g.set_v_dofs( V_n + .5 * dt * ( A_n + A ) );
 
   // new acceleration
 
   A = g.solve();
 
-  g.set_a(A);
+  g.set_a_dofs(A);
 
   // finalize
 
@@ -87,7 +87,7 @@ inline void velocityVerlet(Geometry &g, double dt)
 
 // -------------------------------------------------------------------------------------------------
 
-inline size_t quasiStaticVelocityVerlet(Geometry &g, double dt, double tol)
+inline size_t quasiStaticVelocityVerlet(GeometryFriction &g, double dt, double tol)
 {
   // reset residuals
   g.reset();

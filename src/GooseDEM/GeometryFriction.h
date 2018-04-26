@@ -17,7 +17,7 @@ namespace GooseDEM {
 
 // -------------------------------------------------------------------------------------------------
 
-class GeometryFriction : public virtual Geometry
+class GeometryFriction
 {
 private:
 
@@ -97,8 +97,8 @@ public:
   void set_a(const MatD &pvector);
 
   // overwrite particle vectors, reconstructed from DOF values
-  void set_v(const ColD &dofval); // == set_v(asParticle(V))
-  void set_a(const ColD &dofval); // == set_a(asParticle(A))
+  void set_v_dofs(const ColD &dofval); // == set_v(asParticle(V))
+  void set_a_dofs(const ColD &dofval); // == set_a(asParticle(A))
 
 };
 

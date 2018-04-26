@@ -102,11 +102,11 @@ py::class_<GooseDEM::GeometryFriction>(m, "GeometryFriction")
   .def("dofs_f", &M::GeometryFriction::dofs_f)
   .def("dofs_m", &M::GeometryFriction::dofs_m)
   // -
-  .def("set_v", py::overload_cast<cColD &>(&M::GeometryFriction::set_v))
-  .def("set_a", py::overload_cast<cColD &>(&M::GeometryFriction::set_a))
-  .def("set_x",                            &M::GeometryFriction::set_x )
-  .def("set_v", py::overload_cast<cMatD &>(&M::GeometryFriction::set_v))
-  .def("set_a", py::overload_cast<cMatD &>(&M::GeometryFriction::set_a))
+  .def("set_v"     , &M::GeometryFriction::set_v)
+  .def("set_a"     , &M::GeometryFriction::set_a)
+  .def("set_x"     , &M::GeometryFriction::set_x )
+  .def("set_v_dofs", &M::GeometryFriction::set_v_dofs)
+  .def("set_a_dofs", &M::GeometryFriction::set_a_dofs)
   // print to screen
   .def("__repr__",
     [](const GooseDEM::GeometryFriction &a){ return "<GooseDEM.GeometryFriction>"; }
