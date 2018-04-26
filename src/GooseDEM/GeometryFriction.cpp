@@ -158,7 +158,7 @@ inline MatD GeometryFriction::f() const
 
   // evaluate constitutive models
   f += m_spring .force(m_x);
-  f += m_dashpot.force(m_x);
+  f += m_dashpot.force(m_v);
 
   return f;
 }
