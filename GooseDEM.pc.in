@@ -6,4 +6,4 @@ Description: Simple implementation for DEM
 Requires:
 Version: @GOOSEDEM_VERSION_NUMBER@
 Libs:
-Cflags: -I${prefix}/@INCLUDE_INSTALL_DIR@
+Cflags: -I${prefix}/@GOOSEDEM_INCLUDE_DIR@
