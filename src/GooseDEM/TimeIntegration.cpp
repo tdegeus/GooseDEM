@@ -17,7 +17,7 @@ namespace GooseDEM {
 
 // -------------------------------------------------------------------------------------------------
 
-inline void Verlet(GeometryFriction &g, double dt)
+inline void Verlet(Geometry &g, double dt)
 {
   // history
 
@@ -28,17 +28,17 @@ inline void Verlet(GeometryFriction &g, double dt)
 
   // new position
 
-  g.set_x( g.x() + dt * g.v() + 0.5 * std::pow(dt,2.) * g.a() );
+  g.set_x(MatD( g.x() + dt * g.v() + 0.5 * std::pow(dt,2.) * g.a() ));
 
   // new velocity
 
   A = g.solve();
 
-  g.set_a_dofs( A );
+  g.set_a(ColD( A ));
 
   // new velocity
 
-  g.set_v_dofs( V_n + .5 * dt * ( A_n + A ) );
+  g.set_v(ColD( V_n + .5 * dt * ( A_n + A ) ));
 
   // finalize
 
@@ -47,7 +47,7 @@ inline void Verlet(GeometryFriction &g, double dt)
 
 // -------------------------------------------------------------------------------------------------
 
-inline void velocityVerlet(GeometryFriction &g, double dt)
+inline void velocityVerlet(Geometry &g, double dt)
 {
   // history
 
@@ -58,27 +58,27 @@ inline void velocityVerlet(GeometryFriction &g, double dt)
 
   // new position
 
-  g.set_x( g.x() + dt * g.v() + 0.5 * std::pow(dt,2.) * g.a() );
+  g.set_x(MatD( g.x() + dt * g.v() + 0.5 * std::pow(dt,2.) * g.a() ));
 
   // estimate new velocity
 
-  g.set_v_dofs( V_n + dt * A_n );
+  g.set_v(ColD( V_n + dt * A_n ));
 
   A = g.solve();
 
-  g.set_v_dofs( V_n + .5 * dt * ( A_n + A ) );
+  g.set_v(ColD( V_n + .5 * dt * ( A_n + A ) ));
 
   // new velocity
 
   A = g.solve();
 
-  g.set_v_dofs( V_n + .5 * dt * ( A_n + A ) );
+  g.set_v(ColD( V_n + .5 * dt * ( A_n + A ) ));
 
   // new acceleration
 
   A = g.solve();
 
-  g.set_a_dofs(A);
+  g.set_a(ColD( A ));
 
   // finalize
 
@@ -87,7 +87,7 @@ inline void velocityVerlet(GeometryFriction &g, double dt)
 
 // -------------------------------------------------------------------------------------------------
 
-inline size_t quasiStaticVelocityVerlet(GeometryFriction &g, double dt, double tol)
+inline size_t quasiStaticVelocityVerlet(Geometry &g, double dt, double tol)
 {
   // reset residuals
   g.reset();

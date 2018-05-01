@@ -229,7 +229,7 @@ inline void GeometryFriction::set_a(const MatD &pvector)
 
 // -------------------------------------------------------------------------------------------------
 
-inline void GeometryFriction::set_v_dofs(const ColD &Vin)
+inline void GeometryFriction::set_v(const ColD &Vin)
 {
   // check input
   assert( Vin.size() == m_ndof );
@@ -246,7 +246,7 @@ inline void GeometryFriction::set_v_dofs(const ColD &Vin)
 
 // -------------------------------------------------------------------------------------------------
 
-inline void GeometryFriction::set_a_dofs(const ColD &Ain)
+inline void GeometryFriction::set_a(const ColD &Ain)
 {
   // check input
   assert( Ain.size() == m_ndof );

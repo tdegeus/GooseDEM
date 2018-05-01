@@ -17,7 +17,7 @@ namespace GooseDEM {
 
 // -------------------------------------------------------------------------------------------------
 
-class GeometryFriction
+class GeometryFriction : public Geometry
 {
 private:
 
@@ -69,36 +69,36 @@ public:
   void fext(const MatD &pvector);
 
   // solve for DOF-accelerations [ndof]
-  ColD solve();
+  ColD solve() override;
 
   // reset residuals, check for convergence
-  void reset();
-  bool stop(double tol);
+  void reset() override;
+  bool stop(double tol) override;
 
   // process time-step
-  void timestep(double dt);
+  void timestep(double dt) override;
 
   // return particle vectors [N, ndim]
-  MatD x() const;
-  MatD v() const;
-  MatD a() const;
+  MatD x() const override;
+  MatD v() const override;
+  MatD a() const override;
   MatD f() const;
   ColD m() const;
 
   // return DOF values [ndof]
-  ColD dofs_v() const;
-  ColD dofs_a() const;
+  ColD dofs_v() const override;
+  ColD dofs_a() const override;
   ColD dofs_f() const;
   ColD dofs_m() const;
 
   // overwrite particle vectors [N, ndim]
-  void set_x(const MatD &pvector);
+  void set_x(const MatD &pvector) override;
   void set_v(const MatD &pvector);
   void set_a(const MatD &pvector);
 
   // overwrite particle vectors, reconstructed from DOF values
-  void set_v_dofs(const ColD &dofval); // == set_v(asParticle(V))
-  void set_a_dofs(const ColD &dofval); // == set_a(asParticle(A))
+  void set_v(const ColD &dofval) override; // == set_v(asParticle(V))
+  void set_a(const ColD &dofval) override; // == set_a(asParticle(A))
 
 };
 

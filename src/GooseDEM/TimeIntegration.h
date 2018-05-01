@@ -18,13 +18,13 @@ namespace GooseDEM {
 // -------------------------------------------------------------------------------------------------
 
 // evaluate one time step
-inline void Verlet(GeometryFriction &geometry, double dt);
+inline void Verlet(Geometry &geometry, double dt);
 
 // evaluate one time step
-inline void velocityVerlet(GeometryFriction &geometry, double dt);
+inline void velocityVerlet(Geometry &geometry, double dt);
 
 // iterate until all particles have come to a rest
-inline size_t quasiStaticVelocityVerlet(GeometryFriction &geometry, double dt, double tol);
+inline size_t quasiStaticVelocityVerlet(Geometry &geometry, double dt, double tol);
 
 // -------------------------------------------------------------------------------------------------
 

@@ -32,6 +32,29 @@ typedef const GooseDEM::ColS cColS;
 typedef const GooseDEM::MatD cMatD;
 typedef const GooseDEM::MatS cMatS;
 
+// ======================= Trampoline for parent class - GooseDEM/Geometry.h =======================
+
+class PyGeometry : public M::Geometry
+{
+public:
+  // inherit the constructors
+  using M::Geometry::Geometry;
+
+  // trampoline
+  ColD solve()                    override { PYBIND11_OVERLOAD_PURE( ColD, M::Geometry, solve); }
+  void reset()                    override { PYBIND11_OVERLOAD_PURE( void, M::Geometry, reset); }
+  bool stop(double tol)           override { PYBIND11_OVERLOAD_PURE( bool, M::Geometry, stop, tol); }
+  void timestep(double dt)        override { PYBIND11_OVERLOAD_PURE( void, M::Geometry, timestep, dt); }
+  MatD x() const                  override { PYBIND11_OVERLOAD_PURE( MatD, M::Geometry, x); }
+  MatD v() const                  override { PYBIND11_OVERLOAD_PURE( MatD, M::Geometry, v); }
+  MatD a() const                  override { PYBIND11_OVERLOAD_PURE( MatD, M::Geometry, a); }
+  ColD dofs_v() const             override { PYBIND11_OVERLOAD_PURE( ColD, M::Geometry, dofs_v); }
+  ColD dofs_a() const             override { PYBIND11_OVERLOAD_PURE( ColD, M::Geometry, dofs_a); }
+  void set_x(const MatD &pvector) override { PYBIND11_OVERLOAD_PURE( void, M::Geometry, set_x, pvector); }
+  void set_v(const ColD &dofval)  override { PYBIND11_OVERLOAD_PURE( void, M::Geometry, set_v, dofval); }
+  void set_a(const ColD &dofval)  override { PYBIND11_OVERLOAD_PURE( void, M::Geometry, set_a, dofval); }
+};
+
 // =========================================== GooseDEM ============================================
 
 PYBIND11_MODULE(GooseDEM, m) {
@@ -75,9 +98,34 @@ py::class_<GooseDEM::Dashpot>(m, "Dashpot")
     [](const GooseDEM::Dashpot &a){ return "<GooseDEM.Dashpot>"; }
   );
 
+// ================================ GooseDEM - GooseDEM/Geometry.h =================================
+
+py::class_<GooseDEM::Geometry, PyGeometry> geometry(m, "Geometry");
+
+geometry
+  // -
+  .def(py::init<>())
+  // -
+  .def("solve"   , &M::Geometry::solve)
+  .def("reset"   , &M::Geometry::reset)
+  .def("stop"    , &M::Geometry::stop)
+  .def("timestep", &M::Geometry::timestep)
+  .def("x"       , &M::Geometry::x)
+  .def("v"       , &M::Geometry::v)
+  .def("a"       , &M::Geometry::a)
+  .def("dofs_v"  , &M::Geometry::dofs_v)
+  .def("dofs_a"  , &M::Geometry::dofs_a)
+  .def("set_x"   , &M::Geometry::set_x)
+  .def("set_v"   , &M::Geometry::set_v)
+  .def("set_v"   , &M::Geometry::set_v)
+  // print to screen
+  .def("__repr__",
+    [](const GooseDEM::Geometry &a){ return "<GooseDEM.Geometry>"; }
+  );
+
 // ============================ GooseDEM - GooseDEM/GeometryFriction.h =============================
 
-py::class_<GooseDEM::GeometryFriction>(m, "GeometryFriction")
+py::class_<GooseDEM::GeometryFriction>(m, "GeometryFriction", geometry)
   // constructor
   .def(
     py::init<cColD &, cMatD &, cMatS &>(),
@@ -102,11 +150,11 @@ py::class_<GooseDEM::GeometryFriction>(m, "GeometryFriction")
   .def("dofs_f", &M::GeometryFriction::dofs_f)
   .def("dofs_m", &M::GeometryFriction::dofs_m)
   // -
-  .def("set_v"     , &M::GeometryFriction::set_v)
-  .def("set_a"     , &M::GeometryFriction::set_a)
-  .def("set_x"     , &M::GeometryFriction::set_x )
-  .def("set_v_dofs", &M::GeometryFriction::set_v_dofs)
-  .def("set_a_dofs", &M::GeometryFriction::set_a_dofs)
+  .def("set_v", py::overload_cast<cColD &>(&M::GeometryFriction::set_v))
+  .def("set_a", py::overload_cast<cColD &>(&M::GeometryFriction::set_a))
+  .def("set_x",                            &M::GeometryFriction::set_x )
+  .def("set_v", py::overload_cast<cMatD &>(&M::GeometryFriction::set_v))
+  .def("set_a", py::overload_cast<cMatD &>(&M::GeometryFriction::set_a))
   // print to screen
   .def("__repr__",
     [](const GooseDEM::GeometryFriction &a){ return "<GooseDEM.GeometryFriction>"; }
