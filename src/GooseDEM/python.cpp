@@ -12,7 +12,7 @@
 
 #include <cppmat/pybind11.h>
 
-#include "../src/GooseDEM/GooseDEM.h"
+#include "GooseDEM.h"
 
 // =================================================================================================
 
@@ -63,7 +63,7 @@ m.doc() = "Simple DEM simulation";
 
 // ================================= GooseDEM - GooseDEM/Spring.h ==================================
 
-py::class_<GooseDEM::Spring>(m, "Spring")
+py::class_<M::Spring>(m, "Spring")
   // constructor
   .def(
     py::init<cMatS &, cColD &, cColD &>(),
@@ -77,12 +77,12 @@ py::class_<GooseDEM::Spring>(m, "Spring")
   .def("coordination", &M::Spring::coordination)
   // print to screen
   .def("__repr__",
-    [](const GooseDEM::Spring &a){ return "<GooseDEM.Spring>"; }
+    [](const M::Spring &a){ return "<GooseDEM.Spring>"; }
   );
 
 // ================================= GooseDEM - GooseDEM/Dashpot.h ==================================
 
-py::class_<GooseDEM::Dashpot>(m, "Dashpot")
+py::class_<M::Dashpot>(m, "Dashpot")
   // constructor
   .def(
     py::init<cMatS &, cColD &>(),
@@ -95,17 +95,15 @@ py::class_<GooseDEM::Dashpot>(m, "Dashpot")
   .def("coordination", &M::Dashpot::coordination)
   // print to screen
   .def("__repr__",
-    [](const GooseDEM::Dashpot &a){ return "<GooseDEM.Dashpot>"; }
+    [](const M::Dashpot &a){ return "<GooseDEM.Dashpot>"; }
   );
 
 // ================================ GooseDEM - GooseDEM/Geometry.h =================================
 
-py::class_<GooseDEM::Geometry, PyGeometry> geometry(m, "Geometry");
-
-geometry
-  // -
+py::class_<M::Geometry, PyGeometry>(m, "Geometry")
+  // constructor
   .def(py::init<>())
-  // -
+  // methods
   .def("solve"   , &M::Geometry::solve)
   .def("reset"   , &M::Geometry::reset)
   .def("stop"    , &M::Geometry::stop)
@@ -120,47 +118,7 @@ geometry
   .def("set_v"   , &M::Geometry::set_v)
   // print to screen
   .def("__repr__",
-    [](const GooseDEM::Geometry &a){ return "<GooseDEM.Geometry>"; }
-  );
-
-// ============================ GooseDEM - GooseDEM/GeometryFriction.h =============================
-
-py::class_<GooseDEM::GeometryFriction>(m, "GeometryFriction", geometry)
-  // constructor
-  .def(
-    py::init<cColD &, cMatD &, cMatS &>(),
-    "GeometryFriction",
-    py::arg("m"),
-    py::arg("x"),
-    py::arg("dofs")
-  )
-  // methods
-  // -
-  .def("set", py::overload_cast<const M::Spring  &>(&M::GeometryFriction::set))
-  .def("set", py::overload_cast<const M::Dashpot &>(&M::GeometryFriction::set))
-  // -
-  .def("fix_v", &M::GeometryFriction::fix_v)
-  .def("fext", &M::GeometryFriction::fext)
-  // -
-  .def("x", &M::GeometryFriction::x)
-  .def("v", &M::GeometryFriction::v)
-  .def("a", &M::GeometryFriction::a)
-  .def("f", &M::GeometryFriction::f)
-  .def("m", &M::GeometryFriction::m)
-  // -
-  .def("dofs_v", &M::GeometryFriction::dofs_v)
-  .def("dofs_a", &M::GeometryFriction::dofs_a)
-  .def("dofs_f", &M::GeometryFriction::dofs_f)
-  .def("dofs_m", &M::GeometryFriction::dofs_m)
-  // -
-  .def("set_v", py::overload_cast<cColD &>(&M::GeometryFriction::set_v))
-  .def("set_a", py::overload_cast<cColD &>(&M::GeometryFriction::set_a))
-  .def("set_x",                            &M::GeometryFriction::set_x )
-  .def("set_v", py::overload_cast<cMatD &>(&M::GeometryFriction::set_v))
-  .def("set_a", py::overload_cast<cMatD &>(&M::GeometryFriction::set_a))
-  // print to screen
-  .def("__repr__",
-    [](const GooseDEM::GeometryFriction &a){ return "<GooseDEM.GeometryFriction>"; }
+    [](const M::Geometry &a){ return "<GooseDEM.Geometry>"; }
   );
 
 // ================================== GooseDEM - GooseDEM/Write.h ==================================

@@ -61,7 +61,6 @@ namespace GooseDEM {
 #include "Iterate.h"
 #include "Vector.h"
 #include "Geometry.h"
-#include "GeometryFriction.h"
 #include "TimeIntegration.h"
 
 #include "Write.cpp"
@@ -69,7 +68,6 @@ namespace GooseDEM {
 #include "Dashpot.cpp"
 #include "Iterate.cpp"
 #include "Vector.cpp"
-#include "GeometryFriction.cpp"
 #include "TimeIntegration.cpp"
 
 // -------------------------------------------------------------------------------------------------

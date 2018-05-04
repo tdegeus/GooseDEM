@@ -1,23 +1,30 @@
 /* =================================================================================================
 
+Contributors:
+
+  Tianxia Ma
+  Wencheng Ji
+
 (c - MIT) T.W.J. de Geus (Tom) | tom@geus.me | www.geus.me | github.com/tdegeus/GooseDEM
 
 ================================================================================================= */
 
-#ifndef GOOSEDEM_GEOMETRY_FRICTION_CPP
-#define GOOSEDEM_GEOMETRY_FRICTION_CPP
+#ifndef GOOSEDEM_EXT_FRICITION_GEOMETY_CPP
+#define GOOSEDEM_EXT_FRICITION_GEOMETY_CPP
 
 // -------------------------------------------------------------------------------------------------
 
-#include "GeometryFriction.h"
+#include "Geometry.h"
 
 // -------------------------------------------------------------------------------------------------
 
 namespace GooseDEM {
+namespace Ext {
+namespace Friction {
 
 // -------------------------------------------------------------------------------------------------
 
-inline GeometryFriction::GeometryFriction(const ColD &m, const MatD &x, const MatS &dofs) :
+inline Geometry::Geometry(const ColD &m, const MatD &x, const MatS &dofs) :
   m_x(x), m_m(m), m_dofs(dofs)
 {
   // extract dimensions
@@ -52,21 +59,28 @@ inline GeometryFriction::GeometryFriction(const ColD &m, const MatD &x, const Ma
 
 // -------------------------------------------------------------------------------------------------
 
-inline void GeometryFriction::set(const Spring &mat)
+inline void Geometry::set(const Spring &mat)
 {
   m_spring = mat;
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline void GeometryFriction::set(const Dashpot &mat)
+inline void Geometry::set(const Dashpot &mat)
 {
   m_dashpot = mat;
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline void GeometryFriction::fix_v(const ColS &iip, const ColD &vp)
+inline void Geometry::set(const PotentialAdhesion &mat)
+{
+  m_potentialadhesion = mat;
+}
+
+// -------------------------------------------------------------------------------------------------
+
+inline void Geometry::fix_v(const ColS &iip, const ColD &vp)
 {
   m_iip = iip;
   m_vp  = vp;
@@ -74,7 +88,7 @@ inline void GeometryFriction::fix_v(const ColS &iip, const ColD &vp)
 
 // -------------------------------------------------------------------------------------------------
 
-inline void GeometryFriction::fext(const MatD &pvector)
+inline void Geometry::fext(const MatD &pvector)
 {
   assert( pvector.rows() == m_x.rows() );
   assert( pvector.cols() == m_x.cols() );
@@ -84,21 +98,21 @@ inline void GeometryFriction::fext(const MatD &pvector)
 
 // -------------------------------------------------------------------------------------------------
 
-inline ColD GeometryFriction::solve()
+inline ColD Geometry::solve()
 {
   return m_Minv.cwiseProduct( m_vec.assembleDofs( f() + m_fext ) );
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline void GeometryFriction::reset()
+inline void Geometry::reset()
 {
   m_stop.reset();
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline bool GeometryFriction::stop(double tol)
+inline bool Geometry::stop(double tol)
 {
   // parameters
   double res = 0.0;
@@ -116,84 +130,85 @@ inline bool GeometryFriction::stop(double tol)
 
 // -------------------------------------------------------------------------------------------------
 
-inline void GeometryFriction::timestep(double dt)
+inline void Geometry::timestep(double dt)
 {
   m_t += dt;
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline MatD GeometryFriction::x() const
+inline MatD Geometry::x() const
 {
   return m_x;
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline MatD GeometryFriction::v() const
+inline MatD Geometry::v() const
 {
   return m_v;
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline MatD GeometryFriction::a() const
+inline MatD Geometry::a() const
 {
   return m_a;
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline ColD GeometryFriction::m() const
+inline ColD Geometry::m() const
 {
   return m_m;
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline MatD GeometryFriction::f() const
+inline MatD Geometry::f() const
 {
   // zero-initialize force vector per particle
   MatD f = MatD::Zero(m_N, m_ndim);
 
   // evaluate constitutive models
-  f += m_spring .force(m_x);
-  f += m_dashpot.force(m_v);
+  f += m_spring           .force(m_x);
+  f += m_dashpot          .force(m_v);
+  f += m_potentialadhesion.force(m_v);
 
   return f;
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline ColD GeometryFriction::dofs_v() const
+inline ColD Geometry::dofs_v() const
 {
   return m_vec.asDofs(m_v);
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline ColD GeometryFriction::dofs_a() const
+inline ColD Geometry::dofs_a() const
 {
   return m_vec.asDofs(m_a);
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline ColD GeometryFriction::dofs_m() const
+inline ColD Geometry::dofs_m() const
 {
   return m_vec.asDofs(m_m);
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline ColD GeometryFriction::dofs_f() const
+inline ColD Geometry::dofs_f() const
 {
   return m_vec.assembleDofs(f());
 }
 
 // -------------------------------------------------------------------------------------------------
 
-inline void GeometryFriction::set_x(const MatD &pvector)
+inline void Geometry::set_x(const MatD &pvector)
 {
   // check input
   assert( static_cast<size_t>(pvector.rows()) == m_N    );
@@ -205,7 +220,7 @@ inline void GeometryFriction::set_x(const MatD &pvector)
 
 // -------------------------------------------------------------------------------------------------
 
-inline void GeometryFriction::set_v(const MatD &pvector)
+inline void Geometry::set_v(const MatD &pvector)
 {
   // check input
   assert( static_cast<size_t>(pvector.rows()) == m_N    );
@@ -217,7 +232,7 @@ inline void GeometryFriction::set_v(const MatD &pvector)
 
 // -------------------------------------------------------------------------------------------------
 
-inline void GeometryFriction::set_a(const MatD &pvector)
+inline void Geometry::set_a(const MatD &pvector)
 {
   // check input
   assert( static_cast<size_t>(pvector.rows()) == m_N    );
@@ -229,7 +244,7 @@ inline void GeometryFriction::set_a(const MatD &pvector)
 
 // -------------------------------------------------------------------------------------------------
 
-inline void GeometryFriction::set_v(const ColD &Vin)
+inline void Geometry::set_v(const ColD &Vin)
 {
   // check input
   assert( Vin.size() == m_ndof );
@@ -246,7 +261,7 @@ inline void GeometryFriction::set_v(const ColD &Vin)
 
 // -------------------------------------------------------------------------------------------------
 
-inline void GeometryFriction::set_a(const ColD &Ain)
+inline void Geometry::set_a(const ColD &Ain)
 {
   // check input
   assert( Ain.size() == m_ndof );
@@ -263,7 +278,7 @@ inline void GeometryFriction::set_a(const ColD &Ain)
 
 // -------------------------------------------------------------------------------------------------
 
-}
+}}} // namespace ...
 
 // -------------------------------------------------------------------------------------------------
 

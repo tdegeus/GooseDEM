@@ -1,23 +1,30 @@
 /* =================================================================================================
 
+Contributors:
+
+  Tianxia Ma
+  Wencheng Ji
+
 (c - MIT) T.W.J. de Geus (Tom) | tom@geus.me | www.geus.me | github.com/tdegeus/GooseDEM
 
 ================================================================================================= */
 
-#ifndef GOOSEDEM_GEOMETRY_FRICTION_H
-#define GOOSEDEM_GEOMETRY_FRICTION_H
+#ifndef GOOSEDEM_EXT_FRICITION_GEOMETY_H
+#define GOOSEDEM_EXT_FRICITION_GEOMETY_H
 
 // -------------------------------------------------------------------------------------------------
 
-#include "GooseDEM.h"
+#include "Friction.h"
 
 // -------------------------------------------------------------------------------------------------
 
 namespace GooseDEM {
+namespace Ext {
+namespace Friction {
 
 // -------------------------------------------------------------------------------------------------
 
-class GeometryFriction : public Geometry
+class Geometry : public GooseDEM::Geometry
 {
 private:
 
@@ -50,17 +57,19 @@ private:
   size_t m_ndof; // number of DOFs
 
   // constitutive models
-  Spring  m_spring;
-  Dashpot m_dashpot;
+  Spring            m_spring;
+  Dashpot           m_dashpot;
+  PotentialAdhesion m_potentialadhesion;
 
 public:
 
   // constructor
-  GeometryFriction(const ColD &m, const MatD &x, const MatS &dofs);
+  Geometry(const ColD &m, const MatD &x, const MatS &dofs);
 
   // append constitutive models
-  void set(const Spring  &mat);
-  void set(const Dashpot &mat);
+  void set(const Spring            &mat);
+  void set(const Dashpot           &mat);
+  void set(const PotentialAdhesion &mat);
 
   // set fixed velocity
   void fix_v(const ColS &iip, const ColD &vp);
@@ -104,7 +113,7 @@ public:
 
 // -------------------------------------------------------------------------------------------------
 
-}
+}}} // namespace ...
 
 // -------------------------------------------------------------------------------------------------
 

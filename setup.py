@@ -10,7 +10,7 @@ import setuptools
 import pybind11
 import cppmat
 
-header = open('../src/GooseDEM/GooseDEM.h','r').read()
+header = open('src/GooseDEM/GooseDEM.h','r').read()
 world  = re.split('(.*)(\#define GOOSEDEM_WORLD_VERSION\ )([0-9]+)(.*)',header)[3]
 major  = re.split('(.*)(\#define GOOSEDEM_MAJOR_VERSION\ )([0-9]+)(.*)',header)[3]
 minor  = re.split('(.*)(\#define GOOSEDEM_MINOR_VERSION\ )([0-9]+)(.*)',header)[3]
@@ -20,7 +20,7 @@ __version__ = '.'.join([world,major,minor])
 ext_modules = [
   Extension(
     'GooseDEM',
-    ['python_interface.cpp'],
+    ['src/GooseDEM/python.cpp'],
     include_dirs=[
       pybind11.get_include(False),
       pybind11.get_include(True ),
