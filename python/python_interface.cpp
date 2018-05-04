@@ -139,6 +139,9 @@ py::class_<GooseDEM::GeometryFriction>(m, "GeometryFriction", geometry)
   .def("set", py::overload_cast<const M::Spring  &>(&M::GeometryFriction::set))
   .def("set", py::overload_cast<const M::Dashpot &>(&M::GeometryFriction::set))
   // -
+  .def("fix_v", &M::GeometryFriction::fix_v)
+  .def("fext", &M::GeometryFriction::fext)
+  // -
   .def("x", &M::GeometryFriction::x)
   .def("v", &M::GeometryFriction::v)
   .def("a", &M::GeometryFriction::a)
