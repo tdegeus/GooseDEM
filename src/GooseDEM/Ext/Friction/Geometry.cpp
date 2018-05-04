@@ -114,17 +114,18 @@ inline void Geometry::reset()
 
 inline bool Geometry::stop(double tol)
 {
-  // parameters
-  double res = 0.0;
-  ColD   V   = dofs_v();
+  // external and internal force
+  ColD Fext = m_vec.assembleDofs(m_fext);
+  ColD Fint = m_vec.assembleDofs(f());
 
-  // exclude fixed velocities
-  for ( auto i = 0 ; i < m_iip.size() ; ++i ) V(m_iip(i)) = 0.0;
+  // sum of absolute
+  double res  = Fint.cwiseAbs().sum();
+  double fext = Fext.cwiseAbs().sum();
 
-  // compute kinetic energy
-  for ( auto i = 0 ; i < V.size() ; ++i )
-      res += 0.5 * m_M(i) * std::pow(V(i),2.0);
+  // normalize
+  if ( fext != 0 ) res /= fext;
 
+  // evaluate stopping criterion
   return m_stop.stop(res, tol);
 }
 
