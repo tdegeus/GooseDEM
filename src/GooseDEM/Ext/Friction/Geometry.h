@@ -75,7 +75,10 @@ public:
   void fix_v(const ColS &iip, const ColD &vp);
 
   // set external force
-  void fext(const MatD &pvector);
+  void set_fext(const MatD &pvector);
+
+  // return external force
+  MatD fext() const;
 
   // solve for DOF-accelerations [ndof]
   ColD solve() override;

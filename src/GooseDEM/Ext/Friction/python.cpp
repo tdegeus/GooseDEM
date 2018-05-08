@@ -78,8 +78,9 @@ py::class_<E::Geometry, M::Geometry>(m, "Geometry")
   .def("set", py::overload_cast<const M::Dashpot           &>(&E::Geometry::set))
   .def("set", py::overload_cast<const E::PotentialAdhesion &>(&E::Geometry::set))
   // -
-  .def("fix_v", &E::Geometry::fix_v)
-  .def("fext" , &E::Geometry::fext )
+  .def("fix_v"    , &E::Geometry::fix_v   )
+  .def("set_fext" , &E::Geometry::set_fext)
+  .def("fext"     , &E::Geometry::fext    )
   // -
   .def("x", &E::Geometry::x)
   .def("v", &E::Geometry::v)

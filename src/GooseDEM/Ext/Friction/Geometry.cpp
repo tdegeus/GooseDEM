@@ -88,12 +88,19 @@ inline void Geometry::fix_v(const ColS &iip, const ColD &vp)
 
 // -------------------------------------------------------------------------------------------------
 
-inline void Geometry::fext(const MatD &pvector)
+inline void Geometry::set_fext(const MatD &pvector)
 {
   assert( pvector.rows() == m_x.rows() );
   assert( pvector.cols() == m_x.cols() );
 
   m_fext = pvector;
+}
+
+// -------------------------------------------------------------------------------------------------
+
+inline MatD Geometry::fext() const
+{
+  return m_fext;
 }
 
 // -------------------------------------------------------------------------------------------------
