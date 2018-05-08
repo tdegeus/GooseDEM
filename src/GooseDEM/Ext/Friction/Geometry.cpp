@@ -100,7 +100,24 @@ inline void Geometry::fext(const MatD &pvector)
 
 inline ColD Geometry::solve()
 {
-  return m_Minv.cwiseProduct( m_vec.assembleDofs( f() + m_fext ) );
+  // compute internal and external force
+  ColD Fint = m_vec.assembleDofs( f()    );
+  ColD Fext = m_vec.assembleDofs( m_fext );
+
+  // compute reaction forces, on the prescribed DOFs
+  for ( auto i = 0 ; i < m_iip.size() ; ++i ) Fext(m_iip(i)) = Fint(m_iip(i));
+
+  // update nodal external forces
+  m_fext = m_vec.asParticle(Fext);
+
+  // solve system of equations
+  ColD A = m_Minv.cwiseProduct( Fint + Fext );
+
+  // enforce fixed displacement of boundary DOFs
+  for ( auto i = 0 ; i < m_iip.size() ; ++i ) A(m_iip(i)) = 0.0;
+
+  // return acceleration of DOFs
+  return A;
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -114,9 +131,12 @@ inline void Geometry::reset()
 
 inline bool Geometry::stop(double tol)
 {
-  // external and internal force
-  ColD Fext = m_vec.assembleDofs(m_fext);
-  ColD Fint = m_vec.assembleDofs(f());
+  // compute internal and external force
+  ColD Fint = m_vec.assembleDofs( f()    );
+  ColD Fext = m_vec.assembleDofs( m_fext );
+
+  // compute reaction forces, on the prescribed DOFs
+  for ( auto i = 0 ; i < m_iip.size() ; ++i ) Fext(m_iip(i)) = Fint(m_iip(i));
 
   // sum of absolute
   double res  = Fint.cwiseAbs().sum();

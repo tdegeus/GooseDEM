@@ -25,13 +25,15 @@ namespace Friction {
 
 // -------------------------------------------------------------------------------------------------
 
-inline PotentialAdhesion::PotentialAdhesion(const MatS &particles, const ColD &k, const ColD &b, const ColD &r0, const ColD &e) :
+inline PotentialAdhesion::PotentialAdhesion(
+  const MatS &particles, const ColD &k, const ColD &b, const ColD &r0, const ColD &e) :
   m_particles(particles), m_k(k), m_b(b), m_r0(r0), m_e(e)
 {
   // check input
   assert( m_particles.rows() == m_k .size() );
   assert( m_particles.rows() == m_b .size() );
   assert( m_particles.rows() == m_r0.size() );
+  assert( m_particles.rows() == m_e .size() );
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -52,7 +54,7 @@ inline MatD PotentialAdhesion::force(const MatD &X) const
   cppmat::cartesian::vector<double> f (ndim); // force vector
   double D; // distance in 'local coordinates'
 
-  // loop over all interacted particle pairs
+  // loop over all interacting particle pairs
   for ( auto p = 0 ; p < m_particles.rows() ; ++p )
   {
     // - extract particle numbers
@@ -66,11 +68,16 @@ inline MatD PotentialAdhesion::force(const MatD &X) const
     // - compute the current length
     D = dx.length();
     // - compute the force vector, by comparing to the interacted particles' initial length
-    if ( D <= m_r0(p) ) {
-        f = 12 / D * ( std::pow( m_r0(p) / D, 6 ) - std::pow( m_r0(p) / D, 12 ) ); // - Lennard-Jones force
+    // -- Lennard-Jones force
+    if ( D <= m_r0(p) )
+    {
+      f = 12 / D * ( std::pow( m_r0(p) / D, 6 ) - std::pow( m_r0(p) / D, 12 ) );
     }
-    else {
-        f = (std::pow( m_k(p), 2 ) * m_b(p) * (std::pow( D - m_r0(p), 2) ) + 2 * m_k(p) * (D - m_r0(p))) * exp(- m_k(p) * m_b(p) * (D - m_r0(p))) * dx/D; // - Innovative force
+    // -- innovative force
+    else
+    {
+      f = (std::pow( m_k(p), 2 ) * m_b(p) * (std::pow( D - m_r0(p), 2) ) \
+        + 2 * m_k(p) * (D - m_r0(p))) * exp(- m_k(p) * m_b(p) * (D - m_r0(p))) * dx/D;
     }
 
     // - assemble the force to the particles
@@ -114,13 +121,12 @@ inline ColD PotentialAdhesion::potential(const MatD &X) const
   auto ndim = X.cols(); // number of dimensions
 
   // zero-initialize force per particle
-  MatD V = MatD::Zero(n, 1);
+  ColD V = ColD::Zero(n);
 
   // local variables
   cppmat::cartesian::vector<double> xi(ndim); // position of particle "i"
   cppmat::cartesian::vector<double> xj(ndim); // position of particle "j"
   cppmat::cartesian::vector<double> dx(ndim); // position difference
-  // cppmat::cartesian::vector<double> v (ndim); // potential vector
   double D; // distance in 'local coordinates'
 
   // loop over all interacted particle pairs
@@ -137,19 +143,18 @@ inline ColD PotentialAdhesion::potential(const MatD &X) const
     // - compute the current length
     D = dx.length();
     // - compute the force vector, by comparing to the interacted particles' initial length
-    if ( D <= m_r0(p) ) {
-        V(p, 0) = m_e(p) * ( std::pow( m_r0(p) / D, 12 ) - 2 * std::pow( m_r0(p) / D, 6 ) );
+    // -- Lennard-Jones
+    if ( D <= m_r0(p) )
+    {
+      V(p) = m_e(p) * ( std::pow( m_r0(p) / D, 12 ) - 2 * std::pow( m_r0(p) / D, 6 ) );
     }
-    else {
-        V(p, 0) = - m_k(p) * std::pow( D - m_r0(p) + 2 / (m_k(p) * m_b(p)), 2 ) * exp( - m_k(p) * m_b(p) * (D - m_r0(p)) ) + 4 / (m_k(p) * pow(m_b(p), 2)) - m_e(p);
+    // -- innovative
+    else
+    {
+      V(p) = - m_k(p) * std::pow( D - m_r0(p) \
+           + 2 / (m_k(p) * m_b(p)), 2 ) * exp( - m_k(p) * m_b(p) * (D - m_r0(p)) ) \
+           + 4 / (m_k(p) * pow(m_b(p), 2)) - m_e(p);
     }
-
-    // // - assemble the force to the particles
-    // for ( auto d = 0 ; d < ndim ; ++d )
-    // {
-    //   V(i,d) += v(d);
-    //   V(j,d) -= v(d);
-    // }
   }
 
   return V;
