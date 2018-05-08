@@ -28,15 +28,17 @@ class PotentialAdhesion
 {
 private:
 
-  MatS m_particles; // particle pairs   [n, ndim]
-  ColD m_k;         // stiffness        [n]
-  ColD m_D0;        // relaxed length   [n]
+  MatS m_particles; // particle pairs       [n, ndim]
+  ColD m_k;         // stiffness            [n]
+  ColD m_b;         // maximal force        [n]
+  ColD m_r0;        // equilibrium length   [n]
+  ColD m_e;         // potential factor     [n]
 
 public:
 
   // constructor
   PotentialAdhesion(){};
-  PotentialAdhesion(const MatS &particles, const ColD &k, const ColD &D0);
+  PotentialAdhesion(const MatS &particles, const ColD &k, const ColD &b, const ColD &r0, const ColD &e);
 
   // compute the force on each particle (the output could contain many zero rows)
   MatD force(const MatD &x) const;
@@ -44,6 +46,8 @@ public:
   // compute the coordination of each particle
   ColS coordination(const MatD &X) const;
 
+  // compute the potential energy for each interacted pair
+  ColD potential(const MatD &x) const;
 };
 
 // -------------------------------------------------------------------------------------------------

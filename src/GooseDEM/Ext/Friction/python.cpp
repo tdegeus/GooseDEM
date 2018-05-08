@@ -44,15 +44,18 @@ m.doc() = "Friction simulation";
 py::class_<E::PotentialAdhesion>(m, "PotentialAdhesion")
   // constructor
   .def(
-    py::init<cMatS &, cColD &, cColD &>(),
+    py::init<cMatS &, cColD &, cColD &, cColD &, cColD &>(),
     "PotentialAdhesion",
     py::arg("particles"),
     py::arg("k"),
-    py::arg("D0")
+    py::arg("b"),
+    py::arg("r0"),
+    py::arg("e")
   )
   // methods
   .def("force"       , &E::PotentialAdhesion::force       )
   .def("coordination", &E::PotentialAdhesion::coordination)
+  .def("potential"   , &E::PotentialAdhesion::potential   )
   // print to screen
   .def("__repr__",
     [](const E::PotentialAdhesion &a){ return "<GooseDEM_Ext_Friction.PotentialAdhesion>"; }
@@ -102,4 +105,3 @@ py::class_<E::Geometry, M::Geometry>(m, "Geometry")
 // =================================================================================================
 
 }
-
