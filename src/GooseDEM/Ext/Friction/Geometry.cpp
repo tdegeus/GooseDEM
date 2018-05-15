@@ -200,7 +200,7 @@ inline MatD Geometry::f() const
 
   // evaluate constitutive models
   f += m_spring           .force(m_x);
-  f += m_dashpot          .force(m_x);
+  f += m_dashpot          .force(m_v);
   f += m_potentialadhesion.force(m_x);
 
   return f;
