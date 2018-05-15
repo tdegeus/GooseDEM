@@ -200,10 +200,25 @@ inline MatD Geometry::f() const
 
   // evaluate constitutive models
   f += m_spring           .force(m_x);
-  f += m_dashpot          .force(m_v);
-  f += m_potentialadhesion.force(m_v);
+  f += m_dashpot          .force(m_x);
+  f += m_potentialadhesion.force(m_x);
 
   return f;
+}
+
+// -------------------------------------------------------------------------------------------------
+
+inline ColS Geometry::coordination() const
+{
+  // zero-initialize coordinations column per particle
+  ColS c = ColS::Zero(m_N);
+
+  // evaluate constitutive models
+  c += m_spring           .coordination(m_x);
+  c += m_dashpot          .coordination(m_x);
+  c += m_potentialadhesion.coordination(m_x);
+
+  return c;
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -301,7 +316,7 @@ inline void Geometry::set_a(const ColD &Ain)
   for ( auto i = 0 ; i < m_iip.size() ; ++i ) A(m_iip(i)) = 0.0;
 
   // reconstruct and save nodal quantities
-  m_v = m_vec.asParticle(A);
+  m_a = m_vec.asParticle(A);
 }
 
 // -------------------------------------------------------------------------------------------------

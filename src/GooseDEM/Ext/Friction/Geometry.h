@@ -91,11 +91,12 @@ public:
   void timestep(double dt) override;
 
   // return particle vectors [N, ndim]
-  MatD x() const override;
-  MatD v() const override;
-  MatD a() const override;
-  MatD f() const;
-  ColD m() const;
+  MatD x()            const override;
+  MatD v()            const override;
+  MatD a()            const override;
+  MatD f()            const;
+  ColS coordination() const;
+  ColD m()            const;
 
   // return DOF values [ndof]
   ColD dofs_v() const override;

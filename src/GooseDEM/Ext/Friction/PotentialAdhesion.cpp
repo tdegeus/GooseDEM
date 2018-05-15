@@ -71,9 +71,9 @@ inline MatD PotentialAdhesion::force(const MatD &X) const
     // -- Lennard-Jones force
     if ( D <= m_r0(p) )
     {
-      f = 12 / D * ( std::pow( m_r0(p) / D, 6 ) - std::pow( m_r0(p) / D, 12 ) );
+      f = 12 / D * ( std::pow( m_r0(p) / D, 6 ) - std::pow( m_r0(p) / D, 12 ) ) * dx/D;
     }
-    // -- innovative force
+    // -- Innovative force
     else
     {
       f = (std::pow( m_k(p), 2 ) * m_b(p) * (std::pow( D - m_r0(p), 2) ) \
