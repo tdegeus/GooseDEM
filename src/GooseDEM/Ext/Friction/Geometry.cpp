@@ -105,7 +105,7 @@ inline MatD Geometry::fext() const
 
 // -------------------------------------------------------------------------------------------------
 
-inline ColD Geometry::solve()
+inline MatD Geometry::fres() const
 {
   // compute internal and external force
   ColD Fint = m_vec.assembleDofs( f()    );
@@ -114,11 +114,20 @@ inline ColD Geometry::solve()
   // compute reaction forces, on the prescribed DOFs
   for ( auto i = 0 ; i < m_iip.size() ; ++i ) Fext(m_iip(i)) = Fint(m_iip(i));
 
-  // update nodal external forces
-  m_fext = m_vec.asParticle(Fext);
+  // return as particle vector
+  return m_vec.asParticle(Fext);
+}
+
+// -------------------------------------------------------------------------------------------------
+
+inline ColD Geometry::solve()
+{
+  // compute internal and external force
+  ColD Fint = m_vec.assembleDofs( f()    );
+  ColD Fext = m_vec.assembleDofs( m_fext );
 
   // solve system of equations
-  ColD A = m_Minv.cwiseProduct( Fint + Fext );
+  ColD A = m_Minv.cwiseProduct( Fint - Fext );
 
   // enforce fixed displacement of boundary DOFs
   for ( auto i = 0 ; i < m_iip.size() ; ++i ) A(m_iip(i)) = 0.0;
@@ -145,15 +154,30 @@ inline bool Geometry::stop(double tol)
   // compute reaction forces, on the prescribed DOFs
   for ( auto i = 0 ; i < m_iip.size() ; ++i ) Fext(m_iip(i)) = Fint(m_iip(i));
 
+  // compute residual force
+  ColD Res = Fint - Fext;
+
   // sum of absolute
-  double res  = Fint.cwiseAbs().sum();
+  double res  = Res .cwiseAbs().sum();
   double fext = Fext.cwiseAbs().sum();
 
   // normalize
   if ( fext != 0 ) res /= fext;
 
-  // evaluate stopping criterion
-  return m_stop.stop(res, tol);
+  // check to stop
+  bool stop = m_stop.stop(res, tol);
+
+  // if stop: reset for next increment
+  if ( stop )
+  {
+    // - reset residuals to infinity
+    m_stop.reset();
+    // - ground system
+    m_v.setZero();
+    m_a.setZero();
+  }
+
+  return stop;
 }
 
 // -------------------------------------------------------------------------------------------------

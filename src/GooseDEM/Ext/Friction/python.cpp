@@ -81,6 +81,7 @@ py::class_<E::Geometry, M::Geometry>(m, "Geometry")
   .def("fix_v"    , &E::Geometry::fix_v   )
   .def("set_fext" , &E::Geometry::set_fext)
   .def("fext"     , &E::Geometry::fext    )
+  .def("fres"     , &E::Geometry::fres    )
   // -
   .def("x"           , &E::Geometry::x           )
   .def("v"           , &E::Geometry::v           )

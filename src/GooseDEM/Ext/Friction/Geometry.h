@@ -77,8 +77,9 @@ public:
   // set external force
   void set_fext(const MatD &pvector);
 
-  // return external force
+  // return set external or reaction force force
   MatD fext() const;
+  MatD fres() const;
 
   // solve for DOF-accelerations [ndof]
   ColD solve() override;
